@@ -10,9 +10,9 @@ with lib; {
   options.fht.theme = with types; {
     name = let
       themes = lib.files.get-directories ./themes;
-      themes_name = map (theme_path: lib.files.get-parent-directory theme_path) themes_name;
+      themes_name = map (theme_path: lib.files.get-parent-directory theme_path) themes;
     in
-      mkOpt' (enum themes_name) "gruvchad"
+      mkOpt' (enum ["gruvchad"]) "gruvchad"
       (mdDoc "What theme palette to use?");
     wallpaper = mkOpt (either path null) null;
 
@@ -33,7 +33,7 @@ with lib; {
     mkMerge [
       {
         # Color definition (without hashtag)
-        fht.theme.colors.withoutHashtag = import ./themes/${cfg.name}.nix;
+        fht.theme.colors.withoutHashtag = import ./themes/${cfg.name}/colors.nix;
         # Color definition (with hashtag)
         fht.theme.colors.withHashtag =
           mapAttrs (n: v: "#" + v) cfg.colors.withoutHashtag;
