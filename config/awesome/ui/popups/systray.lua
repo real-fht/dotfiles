@@ -18,24 +18,11 @@ local systray, instance = {}, nil
 function systray:show()
   self.popup.screen = awful.screen.focused()
   self.popup.visible = true
-
-  self.keygrabber = awful.keygrabber({
-    keypressed_callback = function(_, _, key, _) --luacheck: ignore
-      if key == "q" or key == "Escape" then
-        self:hide()
-      end
-    end,
-  })
-  self.keygrabber:start()
-
   self:emit_signal("visibility", true)
 end
 
 function systray:hide()
   self.popup.visible = false
-  if self.keygrabber then
-    pcall(self.keygrabber.stop, self.keygrabber)
-  end
   self:emit_signal("visibility", false)
 end
 
@@ -50,13 +37,19 @@ end
 local function new()
   local ret = gobject({})
   gtable.crush(ret, systray, true)
-  ret.keygrabber = nil
+
+  local systray_widget = wibox.widget({
+    widget = wibox.widget.systray,
+    base_size = beautiful.systray_icon_size,
+    horizontal = true,
+  })
 
   ret.popup = awful.popup({
     screen = awful.screen.focused(),
     ontop = true,
     visible = false,
     shape = helpers.ui.rounded_rect(),
+    bg = beautiful.colors.transparent,
     placement = function(c)
       return awful.placement.bottom_right(c, {
         honor_workarea = true,
@@ -78,7 +71,7 @@ local function new()
             widgets.button.text.normal({
               font = beautiful.icons.xmark.font,
               text = beautiful.icons.xmark.icon,
-              normal_bg = beautiful.systray_alt_bg,
+              normal_bg = beautiful.colors.transparent,
               normal_fg = beautiful.colors.grey_fg,
               halign = "center",
               valign = "center",
@@ -93,16 +86,15 @@ local function new()
         },
       },
       {
-        widget = wibox.container.margin,
-        margins = beautiful.systray_paddings,
+        widget = wibox.container.background,
+        bg = beautiful.systray_bg,
         {
-          widget = wibox.widget.systray,
-          base_size = beautiful.systray_icon_size,
-          horizontal = true,
+          widget = wibox.container.margin,
+          margins = beautiful.systray_paddings,
+          systray_widget,
         },
       },
     }),
-
     -- placement = function(c)
     --     return awful.placement.top_left(c, {
     --         honor_workarea = true,

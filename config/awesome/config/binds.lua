@@ -6,10 +6,10 @@
 ---------------------------------------------------------------------------------
 
 local apps = require("config.apps")
-local app_launcher = require("ui.popups.app-launcher")
 local awful = require("awful")
 local hotkeys_popup = require("awful.hotkeys_popup")
 local helpers = require("helpers")
+local menubar = require("menubar")
 local capi = { awesome = awesome, client = client } -- luacheck: ignore
 -- -*-
 local button, key = awful.button, awful.key
@@ -30,19 +30,19 @@ awful.keyboard.append_global_keybindings({
   key({ super }, "w", function() end, { group = "Awesome", description = "Show Menu" }),
   key({ super, ctrl }, "r", capi.awesome.restart, { group = "Awesome", description = "Restart" }),
   key({ super, shift }, "q", function()
-    require("ui.popups.exit-screen"):toggle()
+    require("ui.screens.power"):toggle()
   end, { group = "Awesome", description = "Exit screen " }),
 })
 -------------------------------------------------------------------------------
 awful.keyboard.append_global_keybindings({
   -- Launcher keys (or lauching programs keys)
   key({ super }, "p", function()
-    app_launcher:toggle()
+    menubar.show(awful.screen.focused())
   end, { group = "Launcher", desc = "Open the Menubar" }),
   -- -*-
   key({ super }, "Return", function()
-    awful.spawn(_G.terminal)
-  end, { group = "Launcher", description = string.format("Terminal (%s)", _G.terminal) }),
+    awful.spawn(apps.terminal)
+  end, { group = "Launcher", description = string.format("Terminal (%s)", apps.terminal) }),
   -- -*-
   key({ super, alt }, "c", function()
     awful.spawn(os.getenv("HOME") .. "/.local/bin/farge")
@@ -63,16 +63,14 @@ awful.keyboard.append_global_keybindings({
   key({ super, alt }, "m", function()
     helpers.spawn.in_terminal("ncmpcpp")
   end, { group = "Launcher", description = "Music Player (ncmpcpp)" }),
+  -- -*-
+  key({ super, shift }, "b", function()
+    awful.spawn(apps.web_browser)
+  end, { group = "Launcher", description = "Music Player (ncmpcpp)" }),
 })
 -------------------------------------------------------------------------------
 awful.keyboard.append_global_keybindings({
   -- key({}, 'XF86XKAudioRaise', function() end, { group = 'Media', description = 'Raise Volume' }),
-})
--------------------------------------------------------------------------------
-awful.keyboard.append_global_keybindings({
-  -- Tag related keybindings. (windows-like)
-  key({ super, ctrl }, "Left", awful.tag.viewprev, { group = "Tag", description = "View Previous" }),
-  key({ super, ctrl }, "Right", awful.tag.viewnext, { group = "Tag", description = "View Next" }),
 })
 -------------------------------------------------------------------------------
 awful.keyboard.append_global_keybindings({

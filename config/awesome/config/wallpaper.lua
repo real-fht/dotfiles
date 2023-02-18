@@ -4,18 +4,12 @@
 ---@module 'config.wallpaper'
 ---------------------------------------------------------------------------------
 
-local awful = require("awful")
 local beautiful = require("beautiful")
-local wibox = require("wibox")
----@diagnostic disable-next-line
-local capi = { screen = screen } -- luacheck: ignore
+local wallpaper = require("modules.bling.module.wallpaper")
 
-capi.screen.connect_signal("request::desktop_decoration", function(s)
-  s.wallpaper = awful.wallpaper({
-    screen = s,
-    widget = wibox.widget({
-      widget = wibox.widget.imagebox,
-      image = beautiful.wallpaper,
-    }),
-  })
-end)
+-- Lazy wallpaper setup using Bling!
+wallpaper.setup({
+  wallpaper = beautiful.wallpaper,
+  position = "maximized",
+  scale = 1,
+})

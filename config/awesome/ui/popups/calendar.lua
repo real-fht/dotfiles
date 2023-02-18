@@ -20,21 +20,11 @@ function calendar:show()
   self.popup.screen = awful.screen.focused()
   self.popup.visible = true
 
-  self.keygrabber = awful.keygrabber({
-    keypressed_callback = function(_, _, key, _) --luacheck: ignore
-      if key == "q" or key == "Escape" then
-        self:hide()
-      end
-    end,
-  })
-  self.keygrabber:start()
-
   self:emit_signal("visibility", true)
 end
 
 function calendar:hide()
   self.popup.visible = false
-  pcall(self.keygrabber.stop, self.keygrabber)
   self:emit_signal("visibility", false)
 end
 
@@ -49,7 +39,6 @@ end
 local function new()
   local ret = gobject({})
   gtable.crush(ret, calendar, true)
-  ret.keygrabber = nil
 
   ret.popup = awful.popup({
     screen = awful.screen.focused(),
@@ -57,6 +46,7 @@ local function new()
     ontop = true,
     visible = false,
     shape = gshape.rectangle,
+    bg = beautiful.colors.transparent,
     placement = function(c)
       return awful.placement.bottom_right(c, {
         honor_workarea = true,

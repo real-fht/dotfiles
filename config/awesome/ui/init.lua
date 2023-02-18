@@ -13,7 +13,9 @@ require("ui.wibar")
 local calendar_popup = require("ui.popups.calendar")
 local layout_picker = require("ui.popups.layout-picker")
 local systray_popup = require("ui.popups.systray")
-local tag_preview = require("ui.popups.tag-preview")
+require("ui.popups.tag-preview")
+-- Initialize screens.
+local power_screen = require("ui.screens.power")
 
 calendar_popup:connect_signal("visibility", function(_, state)
   if state == true then
@@ -24,5 +26,13 @@ end)
 systray_popup:connect_signal("visibility", function(_, state)
   if state == true then
     calendar_popup:hide()
+  end
+end)
+
+power_screen:connect_signal("visibility", function(_, state)
+  if state == true then
+    calendar_popup:hide()
+    systray_popup:hide()
+    layout_picker:hide()
   end
 end)

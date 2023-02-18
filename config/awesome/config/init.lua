@@ -5,13 +5,9 @@
 ---General configuration for window management aspects for AwesomeWM
 ---------------------------------------------------------------------------------
 
--- Basic stuff.
-_G.terminal = "kitty"
-_G.editor_cmd = "kitty -e nvim"
-
 require("awful.autofocus")
 -- -*-
--- require 'config.autostart' -- useless now, managed w/ nix
+require("config.autostart") -- useless now, managed w/ nix
 require("config.tags")
 require("config.client")
 require("config.wallpaper")

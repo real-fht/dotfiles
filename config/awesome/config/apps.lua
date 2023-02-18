@@ -20,7 +20,7 @@ apps.editor = "neovide"
 apps.file_manager = "pcmanfm"
 
 -- What is your preferred web browser, spawned using Mod+Shift+b
-apps.web_browser = "qutebrowser" -- nyxt
+apps.web_browser = "librewolf-bin" -- nyxt
 
 -- What is your preferred screenshot programs.
 apps.screenshot_tool = "flameshot gui"

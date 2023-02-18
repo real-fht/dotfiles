@@ -32,7 +32,6 @@ local monitored = require("modules.dbus_proxy._monitored")
 
 return {
   Proxy = Proxy,
-
   Bus = Bus,
   variant = variant,
   monitored = monitored,

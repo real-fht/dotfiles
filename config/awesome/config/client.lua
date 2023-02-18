@@ -7,6 +7,7 @@
 
 local awful = require("awful")
 local rclient = require("ruled.client")
+local client_helpers = require("helpers.client")
 local capi = { awesome = awesome, client = client } -- luacheck: ignore
 -- -*-
 local button, key = awful.button, awful.key

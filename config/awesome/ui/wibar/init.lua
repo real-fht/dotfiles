@@ -27,8 +27,8 @@ end)()
 local function layoutbox(s)
   return widgets.button.basic.normal({
     shape = helpers.ui.rounded_rect(),
-    normal_bg = beautiful.colors.black2,
-    press_bg = beautiful.colors.black2,
+    normal_bg = beautiful.wibar_item_bg,
+    press_bg = beautiful.wibar_item_bg,
     forced_height = USABLE_WIBAR_HEIGHT,
     forced_width = USABLE_WIBAR_HEIGHT,
     paddings = dpi(6),
@@ -63,7 +63,7 @@ local function taglist(s)
   end
 
   return widgets.container({
-    bg = beautiful.colors.black2,
+    bg = beautiful.wibar_item_bg,
     forced_height = USABLE_WIBAR_HEIGHT,
     paddings = dpi(6),
     child = awful.widget.taglist({
@@ -87,9 +87,6 @@ local function taglist(s)
             end,
             on_leave = function()
               awesome.emit_signal("bling::tag_preview::visibility", s, false)
-            end,
-            on_release = function()
-              tag:view_only()
             end,
             shape = helpers.ui.rounded_rect(dpi(8)),
           })
@@ -196,9 +193,8 @@ end
 local function systray(s)
   local button = widgets.button.text.state({
     shape = helpers.ui.rounded_rect(),
-    normal_bg = beautiful.colors.black2,
-    on_normal_bg = beautiful.colors.black2,
-    press_bg = beautiful.colors.black2,
+    normal_bg = beautiful.wibar_item_bg,
+    press_bg = beautiful.wibar_item_bg,
     normal_fg = beautiful.colors.grey,
     paddings = dpi(3),
     forced_height = USABLE_WIBAR_HEIGHT,
@@ -208,9 +204,6 @@ local function systray(s)
     on_text = beautiful.icons.chevron_down.icon,
     text = beautiful.icons.chevron_up.icon,
     child = awful.widget.layoutbox({ screen = s }),
-    on_press = function()
-      systray_popup:toggle()
-    end,
   })
 
   -- Automatically close the systray.
@@ -228,8 +221,8 @@ end
 local function textclock()
   return widgets.button.basic.normal({
     shape = helpers.ui.rounded_rect(),
-    normal_bg = beautiful.colors.black2,
-    press_bg = beautiful.colors.black2,
+    normal_bg = beautiful.wibar_item_bg,
+    press_bg = beautiful.wibar_item_bg,
     paddings = dpi(6),
     forced_height = USABLE_WIBAR_HEIGHT,
     child = wibox.widget({

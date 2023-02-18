@@ -81,6 +81,7 @@ local function new()
     ontop = true,
     visible = false,
     shape = gshape.rectangle,
+    bg = beautiful.colors.transparent,
     placement = function(c)
       return awful.placement.bottom_left(c, {
         honor_workarea = true,
@@ -102,7 +103,7 @@ local function new()
             widgets.button.text.normal({
               font = beautiful.icons.xmark.font,
               text = beautiful.icons.xmark.icon,
-              normal_bg = beautiful.layout_picker_alt_bg,
+              normal_bg = beautiful.colors.transparent,
               normal_fg = beautiful.colors.grey_fg,
               halign = "center",
               valign = "center",
@@ -117,12 +118,15 @@ local function new()
         },
       },
       {
-        widget = wibox.container.margin,
-        margins = beautiful.layout_picker_paddings,
-        ll,
+        widget = wibox.container.background,
+        bg = beautiful.layout_picker_bg,
+        {
+          widget = wibox.container.margin,
+          margins = beautiful.layout_picker_paddings,
+          ll,
+        },
       },
     }),
-
     -- placement = function(c)
     --     return awful.placement.top_left(c, {
     --         honor_workarea = true,

@@ -10,15 +10,23 @@ pcall(require, "luarocks.loader")
 
 -- Init libraries.
 local beautiful = require("beautiful")
-local gfs = require("gears.filesystem")
 local gtimer = require("gears.timer")
-local THEME_PATH = gfs.get_configuration_dir() .. "/theme/init.lua"
+
+-- Handle errors asap.
+local naughty = require("naughty")
+naughty.connect_signal("request::display_error", function(message, startup)
+  naughty.notification({
+    urgency = "critical",
+    title = "Oops, an error happened" .. (startup and " during startup!" or "!"),
+    message = message,
+  })
+end)
 
 collectgarbage("setpause", 100)
 collectgarbage("setstepmul", 400)
 
 -- Theme variables definitions, accessible from the beautiful object.
-beautiful.init(THEME_PATH)
+beautiful.init(require("theme"))
 
 -- Basic AwesomeWM configuration.
 require("config")

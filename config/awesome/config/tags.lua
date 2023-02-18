@@ -33,5 +33,5 @@ end)
 
 capi.screen.connect_signal("request::desktop_decoration", function(s)
   -- Initialize 9 different tags with tile layout as the default
-  awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, Layout.tile)
+  awful.tag({ "1", "2", "3", "4", "5", "6" }, s, Layout.tile)
 end)

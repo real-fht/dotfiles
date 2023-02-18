@@ -5,10 +5,12 @@
 ---Utility functions used throughout the config
 ---------------------------------------------------------------------------------
 
+local client = require("helpers.client")
 local color = require("helpers.color")
 local ui = require("helpers.ui")
 
 return {
+  client = client,
   color = color,
   ui = ui,
 }

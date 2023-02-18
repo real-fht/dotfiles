@@ -113,7 +113,7 @@ local function new()
 
   ret.month = wtbutton.normal({
     animate_size = false,
-    normal_bg = beautiful.colors.black,
+    normal_bg = beautiful.colors.transparent,
     forced_height = dpi(30),
     paddings = { left = dpi(12), right = dpi(12) },
     text = os.date("%B %Y"),
@@ -131,7 +131,7 @@ local function new()
       size = 12,
       halign = "center",
       normal_fg = beautiful.colors.grey,
-      normal_bg = beautiful.colors.black,
+      normal_bg = beautiful.colors.transparent,
       text = beautiful.icons.caret_left.icon,
       on_release = function()
         ret:decrease_date()
@@ -145,7 +145,7 @@ local function new()
       size = 12,
       halign = "center",
       normal_fg = beautiful.colors.grey,
-      normal_bg = beautiful.colors.black,
+      normal_bg = beautiful.colors.transparent,
       text = beautiful.icons.caret_right.icon,
       on_release = function()
         ret:increase_date()

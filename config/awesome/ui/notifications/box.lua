@@ -121,7 +121,7 @@ naughty.connect_signal("request::display", function(n)
   local dismiss_button = widgets.button.text.normal({
     font = beautiful.icons.xmark.font,
     text = beautiful.icons.xmark.icon,
-    normal_bg = beautiful.notification_alt_bg,
+    normal_bg = beautiful.colors.transparent,
     normal_fg = beautiful.colors.grey_fg,
     halign = "center",
     valign = "center",
@@ -182,7 +182,7 @@ naughty.connect_signal("request::display", function(n)
   })
 
   local actions = wibox.widget({
-    layout = wibox.layout.fixed.horizontal,
+    layout = wibox.layout.flex.horizontal,
     fill_space = true,
     spacing = dpi(15),
   })
@@ -191,9 +191,11 @@ naughty.connect_signal("request::display", function(n)
     local button = widgets.button.text.normal({
       size = 12,
       paddings = beautiful.notification_paddings,
-      hover_bg = beautiful.colors.onebg,
-      text_normal_bg = beautiful.colors.white,
+      normal_bg = beautiful.colors.transparent,
+      normal_fg = beautiful.colors.white,
       text = action.name,
+      halign = "center",
+      valign = "center",
       on_press = function()
         action:invoke()
       end,
@@ -211,13 +213,6 @@ naughty.connect_signal("request::display", function(n)
     maximum_height = beautiful.notification_height,
     offset = { y = dpi(10) }, -- spacing between notifications
     screen = awful.screen.focused(),
-    -- placement = function(c)
-    --     return awful.placement.top_left(c, {
-    --         honor_workarea = true,
-    --         margins = { left = beautiful.useless_gap, top = beautiful.useless_gap },
-    --     })
-    -- end,
-
     -- How the notificatin should appear?
     widget_template = {
       layout = wibox.layout.fixed.vertical,
