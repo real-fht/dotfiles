@@ -31,7 +31,7 @@
     };
 
     # Theming, everything is handled by NixOS!
-    # theme.name = "yoru";
+    theme.name = "gruvchad";
 
     # Enable/disable programs, aswell as setup my configuration and optionally the
     # current system theme for the enabled program.
@@ -41,7 +41,12 @@
       # element   = enable;
       exa = enable;
       fzf = enable;
-      git = enable;
+      git =
+        enable
+        // {
+          userName = "real-fht";
+          userEmail = "nferhat20@gmail.com";
+        };
       kitty = enable;
       neovim = enable;
       # obs = enable;
@@ -88,6 +93,10 @@
       # for now...
       input.keyboardLayout = "fr";
 
+      # Enable networking using NetworkManager (nmcli, nmtui, etc...)
+      # It's also the default for many distributions for it's ease of use
+      networking = enable;
+
       # Audio setup using Pipewire as the audio server.
       # Alsa/Pulse/Jack emulation is done by pipewire too.
       sound = {
@@ -116,10 +125,6 @@
 
   # Enable networking using NetworkManager (nmcli, nmtui, etc...)
   # It's also the default for many distributions for it's ease of use
-  networking.networkmanager.enable = true;
-  networking.networkmanager.wifi.macAddress = "random";
-  # I ain't waiting 1m30s for networkmanager to setup my cards
-  systemd.services.NetworkManager-wait-online.enable = false;
 
   # Better performance on demand for games and some programs
   programs.gamemode = {

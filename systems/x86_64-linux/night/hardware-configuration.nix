@@ -16,20 +16,24 @@
   boot.extraModulePackages = [];
   boot.supportedFilesystems = ["ntfs"];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/a4bccc2e-0fea-48e5-869f-bba094d611e5";
-    fsType = "btrfs";
-  };
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/99cb8750-ed06-4eb1-977f-e781134dbdcb";
+      fsType = "btrfs";
+    };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/596A-593F";
-    fsType = "vfat";
-  };
+  fileSystems."/home" =
+    { device = "/dev/disk/by-uuid/5baae23b-b903-47b8-aca9-34febc2cba9b";
+      fsType = "btrfs";
+    };
 
-  fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/5baae23b-b903-47b8-aca9-34febc2cba9b";
-    fsType = "btrfs";
-  };
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/596A-593F";
+      fsType = "vfat";
+    };
+
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/78c58dc7-dcda-4a69-af11-dcf20b399ff9"; }
+    ];
 
   # Windows disk
   # fileSystems."/mnt/win" = {
@@ -37,8 +41,6 @@
   #   fsType = "ntfs3";
   #   options = ["rw" "uid=1001"];
   # };
-
-  swapDevices = [{device = "/dev/disk/by-uuid/4ec159bd-a1a6-451e-88cd-92d19892110e";}];
 
   # Use per-interface DHCP instead of global DHCP
   networking.interfaces.eno1.useDHCP = true;
