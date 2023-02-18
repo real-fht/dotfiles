@@ -33,6 +33,7 @@
   environment.systemPackages = with pkgs; [
     # The bare-bones stuff.
     coreutils
+    gcc
     git
     cached-nix-shell
 
