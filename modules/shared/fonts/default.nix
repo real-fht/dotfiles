@@ -16,7 +16,8 @@ lib.mkIf config.fht.desktop.xorg.enable {
       noto-fonts-cjk
       # -*-
       (nerdfonts.override {fonts = ["Iosevka"];})
-      fht.roundy
+      iosevka
+      # fht.roundy
     ];
 
     # Use fontconfig for font management.
@@ -32,7 +33,7 @@ lib.mkIf config.fht.desktop.xorg.enable {
       # Setup default fonts to use on the system.
       defaultFonts = {
         emoji = ["Twitter Color Emoji" "Noto Color Emoji"];
-        monospace = ["Roundy" "Iosevka Nerd Font"];
+        monospace = ["Iosevka" "Iosevka Nerd Font"];
         sansSerif = ["Noto Sans" "Twemoji" "Noto Color Emoji"];
         serif = ["Noto" "Twitter Color Emoji" "Noto Color Emoji"];
       };
