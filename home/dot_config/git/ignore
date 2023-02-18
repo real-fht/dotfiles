@@ -1,0 +1,6 @@
+# Global ignores for all my projects.
+node_modules/
+*.swp
+*~
+__pycache__/
+target/

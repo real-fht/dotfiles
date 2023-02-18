@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+
+# ~/.config/zsh/.zshrc -*- Configuration file for zsh.
+
+# Setup for interactives sessions.
+if [[ $TERM != dumb ]]; then
+    # General zsh configuration.
+    _source $ZDOTDIR/options.zsh
+    _source $ZDOTDIR/compinit.zsh # gotta source this before
+    _source $ZDOTDIR/alias.zsh
+    _source $ZDOTDIR/prompt.zsh
+    _source $ZDOTDIR/plugins.zsh
+fi
+
+alias luamake=/home/real/Documents/repos/gh-clone/lua-language-server/3rd/luamake/luamake

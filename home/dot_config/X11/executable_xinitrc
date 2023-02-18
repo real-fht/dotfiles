@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+# ~/.config/X11/xinitrc -*- Startup script for X.org (via xinit)
+
+[ -f ~/.config/X11/xsession ]     && source ~/.config/X11/xsession
+
+exec dbus-launch --exit-with-session awesome

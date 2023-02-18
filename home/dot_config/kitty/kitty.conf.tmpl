@@ -1,0 +1,59 @@
+# ~/.config/kitty/kitty.conf -*- Configuration for the kitty terminal.
+
+# Fonts. Use the system monospace family so I can change my fonts in one go
+# across all the used programs (WM, browser, etc)
+font_family       monospace
+bold_font         auto
+italic_font       auto
+bold_italic_font  auto
+# 11pt => 12px
+font_size         12.0
+# Ligatures are op, never disable them!
+disable_ligatures never
+# Some font tweaks (better underline)
+modify_font underline_position  125%
+modify_font underline_thickness 1.25px
+modify_font cell_height         120%
+# Better ligatures.
+font_features +cv86 +dlig +cv83
+
+# Cursor configuration. Nothing special.
+cursor_shape         block
+
+# Window Layout configuration
+window_border_width  1pt
+window_padding_width 10
+
+# Color configuration.
+active_border_color     #{{ .colors.grey       }}
+active_tab_background   #{{ .colors.black      }}
+active_tab_foreground   #{{ .colors.white      }}
+background              #{{ .colors.black      }}
+cursor                  #{{ .colors.white      }}
+foreground              #{{ .colors.white      }}
+inactive_border_color   #{{ .colors.black2     }}
+inactive_tab_background #{{ .colors.black2     }}
+inactive_tab_foreground #{{ .colors.grey_fg    }}
+selection_background    #{{ .colors.onebg      }}
+selection_foreground    #{{ .colors.grey_fg    }}
+tab_bar_background      #{{ .colors.black2     }}
+url_color               #{{ .colors.grey_fg    }}
+# -*-
+color0                  #{{ .colors.black      }}
+color1                  #{{ .colors.red        }}
+color2                  #{{ .colors.green      }}
+color3                  #{{ .colors.yellow     }}
+color4                  #{{ .colors.blue       }}
+color5                  #{{ .colors.magenta    }}
+color6                  #{{ .colors.cyan       }}
+color7                  #{{ .colors.white      }}
+color8                  #{{ .colors.grey       }}
+color9                  #{{ .colors.yellow     }}
+color10                 #{{ .colors.black2     }}
+color11                 #{{ .colors.onebg      }}
+color12                 #{{ .colors.grey_fg    }}
+color13                 #{{ .colors.light_grey }}
+color14                 #{{ .colors.light_grey }}
+color15                 #{{ .colors.oneb3      }}
+# Cleaner.
+background_opacity      0.93

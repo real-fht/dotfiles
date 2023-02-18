@@ -1,0 +1,13 @@
+# ~/.config/chezmoi/chezmoi.toml -*- Configuration for the chezmoi tool.
+
+# I don't like keeping them in ~/.local/share/chezmoi.
+sourceDir: "~/Documents/dotfiles"
+
+# Some general chezmoi settings.
+color:    "auto"
+destDir:  "~"
+mode:     "symlink"
+progress: true
+
+edit:
+  command: "nvim"

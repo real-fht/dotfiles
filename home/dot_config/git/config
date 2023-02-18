@@ -1,0 +1,50 @@
+# ~/.config/git/config -*- Configuration for the git VCS tool.
+
+[user]
+  # Give git some information about myself, so it can mark **who** did x or y
+  # commits, but this doesn't actually identify yourself in the VCS service you're
+  # using, though...
+  name = real-fht
+  email = nferhat20@gmail.com
+  signingkey = 79E6CEB6B608B845
+
+[init]
+  # Use `main` as the initial branch name. Cleaner than master.
+  defaultBranch = main
+
+[core]
+  # Never trust or handle symlinks, they are too dangerous!
+  symlinks = false
+  # Use what's provided on the current system.
+  editor = "$EDITOR"
+
+[gpg]
+  # GPG settings so I can sign my commits
+	format = openpgp
+
+[aliases]
+  add-select = "!git status --short | fzf | awk '{print $2}' | xargs -r git add";
+  br = "branch";
+  ba = "branch --all";
+  bd = "branch -D";
+  ca = "commit --all";
+  ci = "commit";
+  cl = "clone";
+  co = "checkout";
+  cp = "cherry-pick";
+  st = "status";
+  hist = "log --all - graph --format=format:'%C(bold blue)%h%C(reset) - %C(white)%s%C(reset) %C(bold magenta)%d%C(reset)'";
+  llog = "log --graph --name-status --pretty=format:'%C(red)%h %C(reset)(%cd) %C(green)%an %Creset%s %C(yellow)%d%Creset' --date=relative";
+  ps = "!git push origin $(git rev-parse --abbrev-ref HEAD)";
+  pl = "!git pull origin $(git rev-parse --abbrev-ref HEAD)";
+  af = "!git add $(git ls-files -m -o --exclude-standard | fzf -m)";
+
+
+[commit]
+  # Always sign my commits, without needing to pass --gpg-sign for each one.
+  gpgsign = true
+
+# Some url aliases
+[url "https://github.com/"]
+  insteadOf = "gh:"
+  insteadOf = "github:"

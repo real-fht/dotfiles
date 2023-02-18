@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+
+# ~/.config/zsh/.zshenv -*- Environment setup for zsh.
+
+# Safely source given configuration files.
+# By that I mean that it won't crash execution if the given file isn't readable
+# or doesn't exist.
+function _source { for file in "$@"; do; [ -r $file ] && source $file; done; }
+
+# Be more restrictive with permissions; no one has any business reading things
+# that don't belong to them.
+# (( EUID != 0 )) && umask 027 || umask 077
+
+# Global session variables and profile init for POSIX-compliant shells.
+_source $XDG_CONFIG_HOME/shell/profile.sh

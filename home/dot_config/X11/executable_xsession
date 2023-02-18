@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+# ~/.config/X11/xsession -*- Session script for X.org
+
+# Setup my laptop AZERTY keyboard. It's pretty weird since it replaces the right
+# control key with the chevron keys.
+setxkbmap fr ; xmodmap -e "keycode 105 = less greater"
+
+# May sound weird but it's required to launch pipewire (using gentoo-pipewire-launcher)
+# from awesomewm, since DBUS_SESSION_BUS_ADDRESS needs to be set, and that is done by
+# running the window manager with dbus-launch.
+# gentoo-pipewire-launcher &
