@@ -3,4 +3,4 @@
 These are my dotfiles managed under a NixOS flake, with home-manager as the solution
 to deploy configuration files and such to my user home directory.
 
-> **NOTE**: These are stale atm: I'm using gentoo.
+![Main View of the Config](./.github/assets/main.png)
