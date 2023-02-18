@@ -50,7 +50,7 @@ M.config = function()
 
   -- Setup installed lsp servers.
   for server, executable in pairs({
-    sumneko_lua = "lua-language-server",
+    lua_ls = "lua-language-server",
     nil_ls = "nil",
     tsserver = "typescript-language-server",
     cssls = "vscode-css-language-server",
