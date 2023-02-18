@@ -21,6 +21,22 @@
         "type": "github"
       }
     },
+    "bling": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1675990078,
+        "narHash": "sha256-khHAM26TGwhfXO8RppGia/ViIhxi7wDdLw7P2lg161U=",
+        "owner": "BlingCorp",
+        "repo": "bling",
+        "rev": "affc165bda9dd8a88de8c7d9b22d5ccb466f2742",
+        "type": "github"
+      },
+      "original": {
+        "owner": "BlingCorp",
+        "repo": "bling",
+        "type": "github"
+      }
+    },
     "crane": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -309,6 +325,7 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
+        "bling": "bling",
         "flake-utils-plus": "flake-utils-plus",
         "home-manager": "home-manager",
         "nix-gaming": "nix-gaming",
