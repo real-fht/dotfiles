@@ -47,6 +47,7 @@
           userName = "real-fht";
           userEmail = "nferhat20@gmail.com";
         };
+      gnupg = enable // {gitIntegration = enable // {key = "79E6CEB6B608B845";};};
       kitty = enable;
       neovim = enable;
       # obs = enable;
