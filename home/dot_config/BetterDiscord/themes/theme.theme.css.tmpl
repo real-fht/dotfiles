@@ -744,28 +744,28 @@ code {
 
 :root,
 .theme-dark {
-    --text-normal: #dcddde;
-    --text-muted: #4a4a52;
-    --text-link: #6e6af6;
-    --text-positive: #50dc7d;
-    --text-warning: #8d4949;
-    --text-danger: #8d4949;
-    --text-brand: #6e6af6;
+    --text-normal: #{{ .colors.white }};
+    --text-muted: #{{ .colors.light_grey }};
+    --text-link: #{{ .colors.blue }}ed;
+    --text-positive: #{{ .colors.green }};
+    --text-warning: #{{ .colors.yellow }};
+    --text-danger: #{{ .colors.red }};
+    --text-brand: #{{ .colors.accent }};
 
     --interactive-normal: #b9bbbe;
     --interactive-hover: #dcddde;
     --interactive-active: #c9ced0;
     --interactive-muted: #4f545c;
 
-    --background-primary: {{ .colors.black }};
-    --background-secondary: {{ .colors.black2 }};
-    --background-secondary-alt: {{ .colors.statusline }};
-    --background-tertiary: {{ .colors.darker_black }};
-    --background-accent: {{ .colors.black }};
+    --background-primary: #{{ .colors.black }};
+    --background-secondary: #{{ .colors.black2 }};
+    --background-secondary-alt: #{{ .colors.statusline }};
+    --background-tertiary: #{{ .colors.darker_black }};
+    --background-accent: #{{ .colors.black }};
     --background-floating: var(--background-secondary);
-    --background-message-hover: {{ .colors.oneb3 }}15;
+    --background-message-hover: #{{ .colors.oneb3 }}15;
     --channeltextarea-background: var(--background-secondary);
-    --modal-background: {{ .colors.black }};
+    --modal-background: #{{ .colors.black }};
 
     --background-mentioned: #{{ .colors.accent }}10;
     --background-mentioned-hover: #{{ .colors.accent }}15;
@@ -778,12 +778,12 @@ code {
     --status-warning-text: #000;
     --scrollbar-auto-thumb: #6e6af6;
 
-    --brand-experiment: {{ .colors.accent }};
-    --brand-experiment-hover: {{ .colors.accent }}4d;
-    --brand-experiment-560: {{ .colors.accent }};
-    --channels-default: {{ .colors.grey_fg2 }};
-    --selected-indicator: {{ .colors.green }}DD;
-    --hover-indicator: {{ .colors.white }};
+    --brand-experiment: #{{ .colors.accent }};
+    --brand-experiment-hover: #{{ .colors.accent }}4d;
+    --brand-experiment-560: #{{ .colors.accent }};
+    --channels-default: #{{ .colors.grey_fg2 }};
+    --selected-indicator: #{{ .colors.green }}DD;
+    --hover-indicator: #{{ .colors.white }};
     --font: "monospace", "Twitter Color Emoji", Sans, "Sans Serif";
     --code-font: "monosapce";
     --boost-bar: none;
