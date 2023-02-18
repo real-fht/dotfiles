@@ -35,7 +35,7 @@ with lib; {
       isNormalUser = true;
       home = "/home/${name}";
       group = "users";
-      uid = 1000;
+      uid = 1001;
     };
 
     # -*- Initialise home-manager.
