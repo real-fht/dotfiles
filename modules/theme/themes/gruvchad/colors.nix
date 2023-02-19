@@ -30,6 +30,6 @@ rec {
 
   # What should be the main and secondary color apart from basic  background and
   # foreground (like for example, focused item, etc...)
-  accent = blue;
+  accent = green;
   secondary_accent = cyan;
 }
