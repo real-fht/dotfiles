@@ -3,3 +3,6 @@ result
 doc/index.html
 
 pkgs/_sources/.shake*
+
+# Awesomewm modules that are managed using Nix.
+config/awesome/modules/bling
