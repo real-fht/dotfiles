@@ -24,10 +24,10 @@
     };
 
     # Manage and encrypt secrets using my ssh keys.
-    agenix = {
-      url = "github:ryantm/agenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # agenix = {
+    #   url = "github:ryantm/agenix";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     # Block garbage urls easily with a configuration flag.
     # FIXME: Not working somehow? (the flake)
@@ -103,7 +103,7 @@
       hostDefaults.modules = with inputs;
         [
           home-manager.nixosModules.default # to manage and deploy configuration for my user
-          agenix.nixosModules.default # encrypting secrets using nix
+          # agenix.nixosModules.default # encrypting secrets using nix
           # hosts.nixosModule # block garbage urls and websites.
         ]
         ++ (lib.attrValues nixosModules);
