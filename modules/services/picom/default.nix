@@ -54,7 +54,7 @@ with lib; {
 
         # Background blurring.
         settings.blur-method = "dual_kawase";
-        settings.blur-strength = 24;
+        settings.blur-strength = 5;
         settings.blur-background = true;
         settings.blur-background-fixed = true;
         settings.blur-background-exclude = [];
