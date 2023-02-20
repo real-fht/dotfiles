@@ -24,11 +24,11 @@ function power:show()
       if key == "q" or key == "escape" then
         self:hide()
       elseif key == "r" then
-        awful.spawn("loginctl reboot")
+        awful.spawn("systemctl reboot")
       elseif key == "p" then
-        awful.spawn("loginctl poweroff")
+        awful.spawn("systemctl poweroff")
       elseif key == "s" then
-        awful.spawn("loginctl suspend")
+        awful.spawn("systemctl suspend")
       elseif key == "e" then
         awesome.quit()
       end
@@ -96,13 +96,13 @@ local function new()
     layout = wibox.layout.fixed.horizontal,
     spacing = beautiful.power_screen_button_spacing,
     mkbutton(beautiful.icons.poweroff, beautiful.colors.red, function()
-      awful.spawn("loginctl poweroff")
+      awful.spawn("systemctl poweroff")
     end),
     mkbutton(beautiful.icons.reboot, beautiful.colors.yellow, function()
-      awful.spawn("loginctl reboot")
+      awful.spawn("systemctl reboot")
     end),
     mkbutton(beautiful.icons.moon, beautiful.colors.magenta, function()
-      awful.spawn("loginctl suspend")
+      awful.spawn("systemctl suspend")
     end),
     mkbutton(beautiful.icons.exit, beautiful.colors.blue, function()
       awesome.quit()
