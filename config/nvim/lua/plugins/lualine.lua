@@ -139,8 +139,24 @@ M.config = function()
     "diagnostics",
     sources = { "nvim_diagnostic" },
     sections = { "error", "warn" },
-    symbols = { error = "  ", warn = "  " },
+    symbols = { error = " ", warn = " " },
     padding = { left = 2, right = 0 },
+  })
+
+  ins_left({
+    "filetype",
+    colored = true,
+    icon_only = true,
+    padding = { left = 2, right = 0 },
+    condition = conditions.buffer_not_empty,
+  })
+
+  ins_left({
+    "filename",
+    file_status = true,
+    newfile_status = false,
+    color = { fg = C.light_grey, bg = "none" },
+    condition = conditions.buffer_not_empty,
   })
 
   ins_right({

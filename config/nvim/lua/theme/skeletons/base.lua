@@ -58,28 +58,23 @@ return {
   -- The following are specified in the base16 standard?
   NormalFloat = { bg = "none" },
   FloatBorder = { fg = C.oneb2, bg = "none" },
-
   -- Spelling
   SpellBad = { undercurl = true, sp = C.red },
   SpellCap = { undercurl = true, sp = C.blue },
   SpellLocal = { undercurl = true, sp = C.green },
   SpellRare = { undercurl = true, sp = C.magenta },
-
   -- Builtin LSP client highlights.
   DiagnosticError = { fg = C.red, bold = true },
   DiagnosticWarn = { fg = C.yellow, bold = true },
   DiagnosticInfo = { fg = C.blue, bold = true },
   DiagnosticHint = { fg = C.grey, bold = false },
-
   DiagnosticVirtualTextError = { fg = C.red, bold = true },
   DiagnosticVirtualTextWarn = { fg = C.yellow, bold = true },
   DiagnosticVirtualTextInfo = { fg = C.blue, bold = true },
   DiagnosticVirtualTextHint = { fg = C.grey, bold = false },
-
   DiagnosticUnderlineError = { sp = C.red, underline = true },
   DiagnosticUnderlineWarn = { sp = C.yellow, underline = true },
   DiagnosticUnderlineInfo = { sp = C.blue, underline = true },
   DiagnosticUnderlineHint = { sp = C.grey, underline = false },
-
   -- stylua: ignore end
 }

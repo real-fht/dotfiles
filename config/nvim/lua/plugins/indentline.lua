@@ -26,8 +26,8 @@ M.config = function()
   })
 
   local C = require("theme").colors
-  vim.api.nvim_set_hl(0, "IndentBlanklineChar", { fg = C.black })
-  vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { fg = C.oneb2 })
+  vim.api.nvim_set_hl(0, "IndentBlanklineChar", { fg = C.oneb2, bold = true })
+  vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { fg = C.oneb2, bold = true })
   vim.api.nvim_set_hl(0, "IndentBlanklineContextStart", { bg = "none" })
 end
 

@@ -16,7 +16,7 @@ M.config = function()
   local formatting_on_save = vim.api.nvim_create_augroup("formatting_on_save", { clear = true })
 
   local function use_if_exec_exists(provider, exec)
-    return vim.fn.executable(exec) and provider or nil
+    return vim.fn.executable(exec) > 0 and provider or nil
   end
 
   nls.setup({
@@ -40,13 +40,7 @@ M.config = function()
     end,
     sources = {
       use_if_exec_exists(nls.builtins.formatting.stylua, "stylua"),
-      use_if_exec_exists(nls.builtins.formatting.alejandra, "alejandra"),
       use_if_exec_exists(nls.builtins.diagnostics.luacheck, "luacheck"),
-      nls.builtins.formatting.rustfmt,
-      nls.builtins.formatting.prettier,
-      nls.builtins.diagnostics.eslint,
-      nls.builtins.code_actions.eslint,
-      nls.builtins.code_actions.shellcheck,
     },
   })
 end
