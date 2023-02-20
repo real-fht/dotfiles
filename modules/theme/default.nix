@@ -60,6 +60,9 @@ with lib; {
         # Base16 definition (with hashtag)
         fht.theme.base16.withHashtag =
           mapAttrs (_: v: "#" + v) cfg.base16.withoutHashtag;
+
+        # Set the wallpaper.
+        fht.theme.wallpaper = ./themes/${cfg.name}/wall.jpg;
       }
       (let
         reloadTheme = with pkgs; (writeScriptBin "reloadTheme" ''
@@ -78,5 +81,18 @@ with lib; {
           [ -z "$NORELOAD" ] && ${reloadTheme}/bin/reloadTheme
         '';
       })
+
+      (mkIf (cfg.wallpaper
+        != null) (let
+        wallCmd = ''
+          [ -e "$XDG_DATA_HOME/wallpaper" ] && \
+            ${pkgs.feh}/bin/feh --bg-fill --no-fehbg \
+            $XDG_DATA_HOME/wallpaper
+        '';
+      in {
+        fht.theme.onReload.wallpaper = wallCmd;
+        home.xsession.initExtra = wallCmd;
+        home.xdg.dataFile."wallpaper".source = cfg.wallpaper;
+      }))
     ];
 }
