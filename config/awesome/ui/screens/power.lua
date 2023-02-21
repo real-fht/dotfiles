@@ -29,6 +29,8 @@ function power:show()
         awful.spawn("systemctl poweroff")
       elseif key == "s" then
         awful.spawn("systemctl suspend")
+      elseif key == "h" then
+        awful.spawn("systemctl hibernate")
       elseif key == "e" then
         awesome.quit()
       end
@@ -103,6 +105,9 @@ local function new()
     end),
     mkbutton(beautiful.icons.moon, beautiful.colors.magenta, function()
       awful.spawn("systemctl suspend")
+    end),
+    mkbutton(beautiful.icons.download, beautiful.colors.green, function()
+      awful.spawn("systemctl hibernate")
     end),
     mkbutton(beautiful.icons.exit, beautiful.colors.blue, function()
       awesome.quit()
