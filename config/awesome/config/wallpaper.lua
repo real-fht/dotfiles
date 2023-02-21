@@ -4,6 +4,8 @@
 ---@module 'config.wallpaper'
 ---------------------------------------------------------------------------------
 
+-- NOTE: This is now managed by nixos automatically at X server startup.
+
 local beautiful = require("beautiful")
 local wallpaper = require("modules.bling.module.wallpaper")
 

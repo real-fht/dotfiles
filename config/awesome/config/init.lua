@@ -10,5 +10,5 @@ require("awful.autofocus")
 require("config.autostart") -- useless now, managed w/ nix
 require("config.tags")
 require("config.client")
-require("config.wallpaper")
+-- require("config.wallpaper")
 require("config.binds")
