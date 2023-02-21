@@ -12,7 +12,7 @@ with lib; {
       themes = lib.files.get-directories ./themes;
       themes_name = map (theme_path: builtins.baseNameOf theme_path) themes;
     in
-      mkOpt' (enum themes_name) "gruvchad"
+      mkOpt' (enum themes_name) "yoru"
       (mdDoc "What theme palette to use?");
     wallpaper = mkOpt (either path null) null;
 
