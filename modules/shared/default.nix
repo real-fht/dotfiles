@@ -16,6 +16,10 @@
   # See each host hardware-configuration.nix file to more info.
   networking.useDHCP = lib.mkDefault false;
 
+  # Use dbus-broker since it's faster and compatible with the standard dbus api.
+  # It also uses newer kernel features so that's a plus too!
+  services.dbus.implementation = "broker";
+
   # Remove garbage from my net browsing experience.
   # Hosts file taken from StevenBlack/hosts (Unified+gambling+fakenews+porn)
   # networking.stevenBlackHosts = {
