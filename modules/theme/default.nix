@@ -10,9 +10,9 @@ with lib; {
   options.fht.theme = with types; {
     name = let
       themes = lib.files.get-directories ./themes;
-      themes_name = map (theme_path: lib.files.get-parent-directory theme_path) themes;
+      themes_name = map (theme_path: builtins.baseNameOf theme_path) themes;
     in
-      mkOpt' (enum ["gruvchad"]) "gruvchad"
+      mkOpt' (enum themes_name) "gruvchad"
       (mdDoc "What theme palette to use?");
     wallpaper = mkOpt (either path null) null;
 
