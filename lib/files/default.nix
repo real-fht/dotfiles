@@ -1,5 +1,22 @@
-{lib, ...}: let
-  inherit (lib) filterAttrs mapAttrsToList flatten hasSuffix;
+{
+  lib,
+  inputs,
+  ...
+}: let
+  inherit (import inputs.nixpkgs {system = "x86_64-linux";}) runCommandLocal;
+  inherit
+    (lib)
+    filterAttrs
+    mapAttrsToList
+    flatten
+    hasSuffix
+    genList
+    length
+    lowerChars
+    replaceStrings
+    stringToCharacters
+    upperChars
+    ;
   inherit (builtins) readDir filter baseNameOf;
 in {
   files = rec {
@@ -36,5 +53,32 @@ in {
     # -*-
     get-default-nix-files = path: filter (p: baseNameOf p == "default.nix") (get-files path);
     get-default-nix-files-recursive = path: filter (p: baseNameOf p == "default.nix") (get-files-recursive path);
+
+    # Figures out a valid Nix store name for the given path.
+    storeFileName = path: let
+      # All characters that are considered safe. Note "-" is not
+      # included to avoid "-" followed by digit being interpreted as a
+      # version.
+      safeChars =
+        ["+" "." "_" "?" "="]
+        ++ lowerChars
+        ++ upperChars
+        ++ stringToCharacters "0123456789";
+
+      empties = l: genList (x: "") (length l);
+
+      unsafeInName =
+        stringToCharacters (replaceStrings safeChars (empties safeChars) path);
+
+      safeName = replaceStrings unsafeInName (empties unsafeInName) path;
+    in
+      "hm_" + safeName;
+
+    # To install configuration files.
+    mkOutOfStoreSymlink = path: let
+      pathStr = toString path;
+      name = storeFileName (baseNameOf pathStr);
+    in
+      runCommandLocal name {} ''ln -s ${pathStr} $out'';
   };
 }

@@ -41,10 +41,11 @@ with lib; {
         user.packages = with pkgs; [zsh nix-zsh-completions];
 
         # Install configuration files.
-        home.home.activation.installZSHConfig = ''
-          [ ! -d $XDG_CONFIG_HOME/zsh ] &&
-            ln -s $DOTFILE_FLAKE/config/zsh $XDG_CONFIG_HOME/zsh
-        '';
+        home.xdg.configFile."zsh".source = lib.files.mkOutOfStoreSymlink "/etc/nixos/config/zsh";
+        # home.home.activation.installZSHConfig = ''
+        #   [ ! -d $XDG_CONFIG_HOME/zsh ] &&
+        #     ln -s $DOTFILE_FLAKE/config/zsh $XDG_CONFIG_HOME/zsh
+        # '';
       })
 
       {

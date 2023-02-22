@@ -24,10 +24,7 @@ with lib; {
         ++ [nodePackages.vscode-langservers-extracted];
 
       # Install my configuration
-      home.home.activation.installNeovimConfig = lib.home-manager.hm.dag.entryAfter ["writeBoundary"] ''
-        [ ! -d "$XDG_CONFIG_HOME/nvim" ] &&
-          ln -s "$DOTFILE_FLAKE/config/nvim" "$XDG_CONFIG_HOME/nvim"
-      '';
+      home.xdg.configFile."nvim".source = lib.files.mkOutOfStoreSymlink "/etc/nixos/config/nvim";
 
       # Install colorscheme for Neovim.
       fht.theme.targets.neovim.enable = true;

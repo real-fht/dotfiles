@@ -2,7 +2,14 @@ inputs: let
   # The way I load the library functions from here is inspired and copied from
   # snowfall-lib, very interesting way.
   inherit (inputs.nixpkgs.lib) fix fold recursiveUpdate makeExtensible filterAttrs mapAttrs hasInfix;
-  inherit ((import ./files {inherit (inputs.nixpkgs) lib;}).files) get-default-nix-files-recursive;
+  inherit
+    ((import ./files {
+        inherit (inputs.nixpkgs) lib;
+        inherit inputs;
+      })
+      .files)
+    get-default-nix-files-recursive
+    ;
   inherit (builtins) map removeAttrs isAttrs filter;
 
   # Recursively merge a list of attribute sets.

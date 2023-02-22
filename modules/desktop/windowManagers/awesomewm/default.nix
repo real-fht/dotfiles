@@ -24,13 +24,14 @@ with lib; {
       };
 
       # Link my configuration.
-      home.home.activation.installAwesomeWMConfig = ''
-        [ ! -d $XDG_CONFIG_HOME/awesome ] &&
-          ln -s $DOTFILE_FLAKE/config/awesome $XDG_CONFIG_HOME/awesome
-      '';
+      # home.home.activation.installAwesomeWMConfig = ''
+      #   [ ! -d $XDG_CONFIG_HOME/awesome ] &&
+      #     ln -s $DOTFILE_FLAKE/config/awesome $XDG_CONFIG_HOME/awesome
+      # '';
+      home.xdg.configFile."awesome".source = lib.files.mkOutOfStoreSymlink "/etc/nixos/config/awesome";
 
       # Link awesomewm modules.
-      home.xdg.configFile."awesome/modules/bling".source = inputs.bling.outPath;
+      # home.xdg.configFile."awesome/modules/bling".source = inputs.bling.outPath;
 
       # Enable theming.
       fht.theme.targets.awesomewm.enable = true;
