@@ -31,7 +31,7 @@
     };
 
     # Theming, everything is handled by NixOS!
-    theme.name = "gruvchad";
+    theme.name = "decay-dark";
 
     # Enable/disable programs, aswell as setup my configuration and optionally the
     # current system theme for the enabled program.
