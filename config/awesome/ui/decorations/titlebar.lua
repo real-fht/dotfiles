@@ -61,7 +61,7 @@ client.connect_signal("request::titlebars", function(c)
     shape = gshape.circle,
     halign = "center",
     valign = "center",
-    on_press = function()
+    on_release = function()
       c.minimized = true
     end,
   })

@@ -8,6 +8,7 @@ local M = {}
 
 local beautiful = require("beautiful")
 local gshape = require("gears.shape")
+local gmatrix = require("gears.matrix")
 local wibox = require("wibox")
 local capi = { mouse = mouse } -- luacheck: ignore
 
@@ -65,6 +66,26 @@ function M.add_hover_cursor(w)
       widget.cursor = original_cursor
     end
   end)
+end
+
+local function _get_widget_geometry(_hierarchy, widget)
+  local width, height = _hierarchy:get_size()
+  if _hierarchy:get_widget() == widget then
+    -- Get the extents of this widget in the device space
+    local x, y, w, h = gmatrix.transform_rectangle(_hierarchy:get_matrix_to_device(), 0, 0, width, height)
+    return { x = x, y = y, width = w, height = h, hierarchy = _hierarchy }
+  end
+
+  for _, child in ipairs(_hierarchy:get_children()) do
+    local ret = _get_widget_geometry(child, widget)
+    if ret then
+      return ret
+    end
+  end
+end
+
+function M.get_widget_geometry(wibox, widget)
+  return _get_widget_geometry(wibox._drawable._widget_hierarchy, widget)
 end
 
 return M

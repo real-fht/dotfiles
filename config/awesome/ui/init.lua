@@ -13,6 +13,7 @@ require("ui.wibar")
 local calendar_popup = require("ui.popups.calendar")
 local layout_picker = require("ui.popups.layout-picker")
 local systray_popup = require("ui.popups.systray")
+local main_menu = require("ui.popups.main-menu")
 require("ui.popups.tag-preview")
 -- Initialize screens.
 local power_screen = require("ui.screens.power")

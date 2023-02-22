@@ -97,6 +97,13 @@ local function new()
     }),
   })
 
+  -- Hide when changing tags
+  tag.connect_signal("property::selected", function()
+    if ret.popup.visible then
+      ret:hide()
+    end
+  end)
+
   return ret
 end
 

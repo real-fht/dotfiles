@@ -10,6 +10,7 @@ local awful = require("awful")
 local hotkeys_popup = require("awful.hotkeys_popup")
 local helpers = require("helpers")
 local menubar = require("menubar")
+local main_menu = require("ui.popups.main-menu")
 local capi = { awesome = awesome, client = client } -- luacheck: ignore
 -- -*-
 local button, key = awful.button, awful.key
@@ -19,7 +20,9 @@ local lmb, mmb, rmb, scrollup, scrolldown = 1, 2, 3, 4, 5 -- luacheck: ignore
 -------------------------------------------------------------------------------
 awful.mouse.append_global_mousebindings({
   -- Todo the menu a
-  button({}, lmb, function() end),
+  button({}, rmb, function()
+    main_menu:show()
+  end),
   button({}, scrollup, awful.tag.viewprev),
   button({}, scrolldown, awful.tag.viewnext),
 })
@@ -27,7 +30,9 @@ awful.mouse.append_global_mousebindings({
 awful.keyboard.append_global_keybindings({
   -- General awesomewm keys
   key({ super }, "F1", hotkeys_popup.show_help, { group = "Awesome", description = "Show Help" }),
-  key({ super }, "w", function() end, { group = "Awesome", description = "Show Menu" }),
+  key({ super }, "w", function()
+    main_menu:toggle()
+  end, { group = "Awesome", description = "Show Menu" }),
   key({ super, ctrl }, "r", capi.awesome.restart, { group = "Awesome", description = "Restart" }),
   key({ super, shift }, "q", function()
     require("ui.screens.power"):toggle()

@@ -176,6 +176,7 @@ local function new()
   ret:set_date(os.date("*t"))
 
   gtable.crush(widget, calendar, true)
+
   return widget
 end
 

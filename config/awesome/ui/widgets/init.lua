@@ -8,6 +8,7 @@
 local button = require("ui.widgets.button")
 local calendar = require("ui.widgets.calendar")
 local container = require("ui.widgets.container")
+local menu = require("ui.widgets.menu")
 -- local icons = require 'ui.widgets.icons'
 local separator = require("ui.widgets.separator")
 local screen_mask = require("ui.widgets.screen-mask")
@@ -17,6 +18,7 @@ return {
   button = button,
   calendar = calendar,
   container = container,
+  menu = menu,
   -- icons = icons,
   separator = separator,
   screen_mask = screen_mask,
