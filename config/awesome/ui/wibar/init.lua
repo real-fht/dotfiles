@@ -203,7 +203,9 @@ local function systray(s)
     font = beautiful.icons.chevron_up.font,
     on_text = beautiful.icons.chevron_down.icon,
     text = beautiful.icons.chevron_up.icon,
-    child = awful.widget.layoutbox({ screen = s }),
+    on_press = function()
+      systray_popup:toggle()
+    end,
   })
 
   -- Automatically close the systray.

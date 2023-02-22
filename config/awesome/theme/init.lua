@@ -122,7 +122,7 @@ theme.tasklist_item_paddings                = dpi(3) -- inner paddings
 theme.tasklist_item_bg_focus                = theme.colors.oneb2
 theme.tasklist_item_bg_normal               = theme.colors.black2
 theme.tasklist_item_bg_urgent               = theme.colors.red .. '1c'
-theme.tasklist_item_bg_minimized            = theme.wibar_bg -- theme.colors.black
+theme.tasklist_item_bg_minimized            = theme.colors.transparent -- theme.colors.black
 
 -- Tag preview settings.
 theme.tag_preview_client_bg                 = theme.colors.black2
