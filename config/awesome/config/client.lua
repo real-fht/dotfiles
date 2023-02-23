@@ -7,7 +7,7 @@
 
 local awful = require("awful")
 local rclient = require("ruled.client")
-local client_helpers = require("helpers.client")
+local icon_theme = require("modules.icon_theme")
 local capi = { awesome = awesome, client = client } -- luacheck: ignore
 -- -*-
 local button, key = awful.button, awful.key
@@ -133,6 +133,7 @@ rclient.connect_signal("request::rules", function()
         "minecraft-launcher",
         "Etterna",
         "PrismLauncher",
+        "Quaver",
       },
       name = { "Roblox" },
     },
@@ -222,34 +223,6 @@ rclient.connect_signal("request::rules", function()
     },
   })
 end)
--------------------------------------------------------------------------------
--- This is for proper icon management.
--- local icon_cache = {}
--- capi.client.connect_signal('manage', function(c)
---     local icon = menubar.utils.lookup_icon(c.instance)
---     local lower_icon = menubar.utils.lookup_icon(c.instance:lower())
---
---     -- Use the cache if icon already exists.
---     if icon_cache[c.instance] ~= nil then
---         c.icon = icon_cache[c.instance]
---     elseif icon ~= nil then
---         local raw_icon = gsurface(icon)
---         c.icon = raw_icon._native
---         icon_cache[c.instance] = raw_icon._native
---     elseif lower_icon ~= nil then
---         -- Otherwise check if it exists using the lowercase name
---         local raw_icon = gsurface(lower_icon)
---         c.icon = raw_icon._native
---         icon_cache[c.instance] = raw_icon._native
---
---         --Check if the client already has an icon. If not, give it a default.
---     elseif c.icon == nil then
---         local raw_icon = gsurface(menubar.utils.lookup_icon 'application-default-icon')
---         c.icon = raw_icon._native
---     end
---
---     -- c.shape = helpers.ui.rounded_rect(8)
--- end)
 -------------------------------------------------------------------------------
 -- Enable window swallowing, helps with child clients opened from a terminal
 require("modules.bling").module.window_swallowing.start()
