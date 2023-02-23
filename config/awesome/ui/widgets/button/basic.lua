@@ -65,61 +65,61 @@ local basic = { mt = {} }
 ---@param args BasicButtonArgs
 ---@return BasicButtonArgs
 local function ensure_button_args(args)
-    -- stylua: ignore start
-    args = args or {}
+  -- stylua: ignore start
+  args                        = args or {}
 
-    -- Coloring
-    args.normal_bg    = args.normal_bg or beautiful.colors.black2
-    args.hover_bg     = args.hover_bg or helpers.color.lighten(args.normal_bg, 15)
-    args.press_bg     = args.press_bg or helpers.color.darken(args.normal_bg, 15)
-    -- -*-
-    args.on_normal_bg = args.on_normal_bg or helpers.color.lighten(args.normal_bg, 5)
-    args.on_hover_bg  = args.on_hover_bg or helpers.color.lighten(args.normal_bg, 20)
-    args.on_press_bg  = args.on_press_bg or helpers.color.darken(args.normal_bg, 10)
+  -- Coloring
+  args.normal_bg              = args.normal_bg or beautiful.colors.black2
+  args.hover_bg               = args.hover_bg or helpers.color.lighten(args.normal_bg, 15)
+  args.press_bg               = args.press_bg or helpers.color.darken(args.normal_bg, 15)
+  -- -*-
+  args.on_normal_bg           = args.on_normal_bg or helpers.color.lighten(args.normal_bg, 5)
+  args.on_hover_bg            = args.on_hover_bg or helpers.color.lighten(args.normal_bg, 20)
+  args.on_press_bg            = args.on_press_bg or helpers.color.darken(args.normal_bg, 10)
 
-    -- Border width
-    args.normal_border_width    = args.normal_border_width or 0
-    args.hover_border_width     = args.hover_border_width or 0
-    args.press_border_width     = args.press_border_width or 0
-    args.on_normal_border_width = args.on_normal_border_width or 0
-    args.on_hover_border_width  = args.on_hover_border_width or 0
-    args.on_press_border_width  = args.on_press_border_width or 0
+  -- Border width
+  args.normal_border_width    = args.normal_border_width or 0
+  args.hover_border_width     = args.hover_border_width or 0
+  args.press_border_width     = args.press_border_width or 0
+  args.on_normal_border_width = args.on_normal_border_width or 0
+  args.on_hover_border_width  = args.on_hover_border_width or 0
+  args.on_press_border_width  = args.on_press_border_width or 0
 
-    -- Border color
-    args.normal_border_color    = args.normal_border_color or beautiful.colors.transparent
-    args.hover_border_color     = args.hover_border_color or beautiful.colors.transparent
-    args.press_border_color     = args.press_border_color or beautiful.colors.transparent
-    args.on_normal_border_color = args.on_normal_border_color or beautiful.colors.transparent
-    args.on_hover_border_color  = args.on_hover_border_color or beautiful.colors.transparent
-    args.on_press_border_color  = args.on_press_border_color or beautiful.colors.transparent
+  -- Border color
+  args.normal_border_color    = args.normal_border_color or beautiful.colors.transparent
+  args.hover_border_color     = args.hover_border_color or beautiful.colors.transparent
+  args.press_border_color     = args.press_border_color or beautiful.colors.transparent
+  args.on_normal_border_color = args.on_normal_border_color or beautiful.colors.transparent
+  args.on_hover_border_color  = args.on_hover_border_color or beautiful.colors.transparent
+  args.on_press_border_color  = args.on_press_border_color or beautiful.colors.transparent
 
-    -- Callbacks
-    args.on_hover             = args.on_hover or nil
-    args.on_leave             = args.on_leave or nil
-    args.on_press             = args.on_press or nil
-    args.on_release           = args.on_release or nil
-    args.on_secondary_press   = args.on_secondary_press or nil
-    args.on_secondary_release = args.on_secondary_release or nil
-    args.on_scroll_up         = args.on_scroll_up or nil
-    args.on_scroll_down       = args.on_scroll_down or nil
-    args.on_turn_on           = args.on_turn_on or nil
-    args.on_turn_off          = args.on_turn_off or nil
+  -- Callbacks
+  args.on_hover               = args.on_hover or nil
+  args.on_leave               = args.on_leave or nil
+  args.on_press               = args.on_press or nil
+  args.on_release             = args.on_release or nil
+  args.on_secondary_press     = args.on_secondary_press or nil
+  args.on_secondary_release   = args.on_secondary_release or nil
+  args.on_scroll_up           = args.on_scroll_up or nil
+  args.on_scroll_down         = args.on_scroll_down or nil
+  args.on_turn_on             = args.on_turn_on or nil
+  args.on_turn_off            = args.on_turn_off or nil
 
-    -- Arguments for the button container
-    args.forced_width  = args.forced_width or nil
-    args.forced_height = args.forced_height or nil
-    args.shape         = args.shape or helpers.ui.rounded_rect(beautiful.border_radius)
-    args.margins       = args.margins or dpi(0)
-    args.paddings      = args.paddings or dpi(0)
-    args.halign        = args.halign or "center"
-    args.valign        = args.valign or "center"
+  -- Arguments for the button container
+  args.forced_width           = args.forced_width or nil
+  args.forced_height          = args.forced_height or nil
+  args.shape                  = args.shape or helpers.ui.rounded_rect(beautiful.border_radius)
+  args.margins                = args.margins or dpi(0)
+  args.paddings               = args.paddings or dpi(0)
+  args.halign                 = args.halign or "center"
+  args.valign                 = args.valign or "center"
 
-    -- Shouldwe add a custom hover effect to the button?
-    -- This adds a hover cursor effect and a cool color change
-    args.hover_effect = args.hover_effect == nil and true or args.hover_effect
+  -- Shouldwe add a custom hover effect to the button?
+  -- This adds a hover cursor effect and a cool color change
+  args.hover_effect           = args.hover_effect == nil and true or args.hover_effect
 
-    -- Should the button be on by default?
-    args.on_by_default = args.on_by_default == nil and false or args.on_by_default
+  -- Should the button be on by default?
+  args.on_by_default          = args.on_by_default == nil and false or args.on_by_default
 
   -- stylua: ignore end
 
@@ -169,7 +169,7 @@ local function create_button(args)
       border_color = helpers.color.hex_to_rgba(args.normal_border_color),
       border_width = args.normal_border_width,
     },
-    duration = 1 / 4, -- 1/8 feels too fast.
+    duration = 1 / 8,
     easing = animation.easing.linear,
     update = function(_, pos)
       if pos.bg then

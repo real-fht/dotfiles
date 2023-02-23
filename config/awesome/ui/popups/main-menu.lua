@@ -31,7 +31,9 @@ local function new()
       text = "Text Editor",
       icon = beautiful.icons.code,
     }),
+
     widgets.menu.separator(),
+
     widgets.menu.sub_menu_button({
       text = "AwesomeWM",
       icon = beautiful.icons.window,
