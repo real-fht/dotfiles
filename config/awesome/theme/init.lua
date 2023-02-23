@@ -119,10 +119,16 @@ theme.taglist_item_color_urgent             = theme.colors.red
 theme.tasklist_item_spacing                 = dpi(6)
 theme.tasklist_item_paddings                = dpi(3) -- inner paddings
 -- -*-
-theme.tasklist_item_bg_focus                = theme.colors.oneb2
-theme.tasklist_item_bg_normal               = theme.colors.black2
-theme.tasklist_item_bg_urgent               = theme.colors.red .. '1c'
-theme.tasklist_item_bg_minimized            = theme.colors.transparent -- theme.colors.black
+theme.tasklist_item_bg_focus                = theme.colors.oneb3
+theme.tasklist_item_bg_normal               = theme.colors.onebg
+theme.tasklist_indicator_color_focus        = theme.accent
+theme.tasklist_indicator_color_normal       = theme.colors.grey
+theme.tasklist_indicator_color_urgent       = theme.colors.red
+theme.tasklist_indicator_color_minimized    = theme.colors.transparent
+theme.tasklist_indicator_width_focus        = dpi(12)
+theme.tasklist_indicator_width_normal       = dpi(4)
+theme.tasklist_indicator_width_urgent       = dpi(8)
+theme.tasklist_indicator_width_minimized    = 0
 
 -- Tag preview settings.
 theme.tag_preview_client_bg                 = theme.colors.black2
@@ -384,10 +390,8 @@ theme.apps                                  = {
     file_roller = { command = 'file-roller', class = 'File-roller', icon = theme.icons.archeive },
     lxappearance = { command = 'Lxappearance', class = 'lxappearance', icon = theme.icons.palette },
     nvidia_settings = { command = 'nvidia-settings', class = 'Nvidia-settings', icon = theme.icons.nvidia },
-    wpgtk = { command = 'wpg', class = 'Wpg', icon = theme.icons.spraycan },
+    sxiv = { command = "sxiv", class = "Sxiv", icon = theme.icons.image },
     feh = { command = 'feh', class = 'feh', icon = theme.icons.image },
-    eye_of_gnome = { command = 'eog', class = 'Eog', icon = theme.icons.image },
-    gwenview = { command = 'gwenview', class = 'gwenview', icon = theme.icons.image },
     flameshot_gui = { command = 'flameshot gui -p ~/Pictures', class = 'flameshot', icon = theme.icons.camera_retro },
     flameshot = { command = 'flameshot full -c -p ~/Pictures', class = 'flameshot', icon = theme.icons.camera_retro },
     screenshot_select = {
