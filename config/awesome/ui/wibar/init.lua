@@ -7,6 +7,7 @@
 local animation = require("modules.animation")
 local awful = require("awful")
 local beautiful = require("beautiful")
+local gshape = require("gears.shape")
 local dpi = beautiful.xresources.apply_dpi
 local helpers = require("helpers")
 local icon_theme = require("modules.icon_theme")
@@ -95,15 +96,15 @@ local function taglist(s)
               color = helpers.color.hex_to_rgba(beautiful.taglist_item_color_normal),
               width = beautiful.taglist_item_width_normal,
             },
-            duration = 12 ^ -1,
+            duration = 1 / 8,
             easing = animation.easing.linear,
             update = function(_, pos)
               indicator:set_bg(helpers.color.rgba_to_hex(pos.color))
               indicator:set_width(pos.width)
             end,
           })
-          update_tag_look(self, tag)
           self:set_widget(indicator)
+          update_tag_look(self, tag)
         end,
         update_callback = update_tag_look,
       },
@@ -113,19 +114,36 @@ end
 
 local function tasklist(s)
   local function update_client_look(self, c)
-    local targets
+    local targets = {}
 
     if c.active then
-      targets = beautiful.tasklist_item_bg_focus
+      -- Indicator
+      targets.width = beautiful.tasklist_indicator_width_focus
+      targets.color = beautiful.tasklist_indicator_color_focus
+      -- Container
+      self.icon_container:turn_on()
     elseif c.urgent then
-      targets = beautiful.tasklist_item_bg_urgent
+      -- Indicator
+      targets.width = beautiful.tasklist_indicator_width_urgent
+      targets.color = beautiful.tasklist_indicator_color_urgent
+      self.icon_container:turn_on()
     elseif c.minimized then
-      targets = beautiful.tasklist_item_bg_minimized
+      -- Indicator
+      targets.width = beautiful.tasklist_indicator_width_minimized
+      targets.color = beautiful.tasklist_indicator_color_minimized
+      -- Container
+      self.icon_container:turn_off()
     else
-      targets = beautiful.tasklist_item_bg_normal
+      -- The default.
+      targets.width = beautiful.tasklist_indicator_width_normal
+      targets.color = beautiful.tasklist_indicator_color_normal
+      self.icon_container:turn_off()
     end
 
-    self.background_animation:set(helpers.color.hex_to_rgba(targets))
+    self.icon_indicator_animation:set({
+      width = targets.width,
+      color = helpers.color.hex_to_rgba(targets.color),
+    })
   end
 
   return widgets.container({
@@ -146,43 +164,53 @@ local function tasklist(s)
         halign = "center",
         valign = "center",
         create_callback = function(self, c, index, clients)
-          local container = wibox.widget({
-            widget = wibox.container.background,
+          self.icon_container = widgets.button.basic.state({
+            normal_bg = beautiful.tasklist_item_bg_normal,
+            on_normal_bg = beautiful.tasklist_item_bg_focus,
+            on_by_default = c.focus,
             forced_height = USABLE_WIBAR_HEIGHT,
             forced_width = USABLE_WIBAR_HEIGHT,
-            bg = beautiful.tasklist_item_bg_normal,
-            shape = helpers.ui.rounded_rect(),
-            halign = "center",
-            valign = "center",
           })
-          -- -*-
-          self.background_animation = animation:new({
-            pos = helpers.color.hex_to_rgba(beautiful.tasklist_item_bg_normal),
-            duration = 12 ^ -1,
+
+          local icon_indicator = widgets.container({
+            shape = gshape.rounded_bar,
+            forced_height = dpi(2),
+            forced_width = beautiful.tasklist_indicator_width_normal,
+            valign = "bottom",
+            bg = beautiful.tasklist_indicator_color_normal,
+          })
+
+          self.icon_indicator_animation = animation:new({
+            duration = 1 / 8,
             easing = animation.easing.linear,
+            pos = {
+              color = helpers.color.hex_to_rgba(beautiful.tasklist_indicator_color_normal),
+              width = beautiful.tasklist_indicator_width_normal,
+            },
             update = function(_, pos)
-              container:set_bg(helpers.color.rgba_to_hex(pos))
+              icon_indicator:set_bg(helpers.color.rgba_to_hex(pos.color))
+              icon_indicator:set_width(pos.width)
             end,
           })
 
           local icon = wibox.widget({
-            widget = wibox.container.constraint,
-            constraint_strategy = "max",
-            width = USABLE_WIBAR_HEIGHT,
-            height = USABLE_WIBAR_HEIGHT,
+            widget = wibox.container.margin,
+            margins = beautiful.tasklist_item_paddings,
             {
-              widget = wibox.container.margin,
-              margins = beautiful.tasklist_item_paddings,
-              {
-                widget = wibox.widget.imagebox,
-                image = icon_theme:get_client_icon_path(c) or c.icon,
-              },
+              widget = wibox.widget.imagebox,
+              image = icon_theme:get_client_icon_path(c),
+              resize = true,
             },
           })
-          container:set_widget(icon)
 
+          local stack = wibox.widget({
+            layout = wibox.layout.stack,
+            self.icon_container,
+            icon,
+            icon_indicator,
+          })
+          self:set_widget(stack)
           update_client_look(self, c)
-          self:set_widget(container)
         end,
         update_callback = update_client_look,
       },
@@ -190,7 +218,7 @@ local function tasklist(s)
   })
 end
 
-local function systray(s)
+local function systray()
   local button = widgets.button.text.state({
     shape = helpers.ui.rounded_rect(),
     normal_bg = beautiful.wibar_item_bg,
