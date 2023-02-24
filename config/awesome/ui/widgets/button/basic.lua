@@ -58,6 +58,7 @@ local basic = { mt = {} }
 ---@field halign                 HorizontalAlignement?
 ---@field valign                 VerticalAlignement?
 ---@field hover_effect           boolean?
+---@field press_effect           boolean?
 ---@field on_by_default          boolean?
 ---@field child                  BasicButtonArgs
 
@@ -114,9 +115,10 @@ local function ensure_button_args(args)
   args.halign                 = args.halign or "center"
   args.valign                 = args.valign or "center"
 
-  -- Shouldwe add a custom hover effect to the button?
-  -- This adds a hover cursor effect and a cool color change
+  -- Should we add a custom hover/press effect to the button?
+  -- This adds a hover/press cursor effect and a cool color change
   args.hover_effect           = args.hover_effect == nil and true or args.hover_effect
+  args.press_effect           = args.press_effect == nil and true or args.press_effect
 
   -- Should the button be on by default?
   args.on_by_default          = args.on_by_default == nil and false or args.on_by_default
@@ -196,15 +198,15 @@ function basic.normal(args)
   local widget = create_button(args)
 
   widget:connect_signal("mouse::enter", function(self, results)
-    if args.hover_effect == true then
+    if args.hover_effect then
       button_effect(widget, args.hover_bg, args.hover_border_color, args.hover_border_width)
     end
 
-    if type(args.on_hover) == "function" then
+    if args.on_hover ~= nil then
       args.on_hover(self, results)
     end
 
-    if args.child and type(args.child.on_hover) == "function" then
+    if args.child and args.child.on_hover ~= nil then
       args.child:on_hover(self, results)
     end
   end)
@@ -214,36 +216,36 @@ function basic.normal(args)
     -- Since even if I have the mouse button *still pressed*, leaving the widget
     -- area should make me stop pressing the said widget
     if widget.button == 1 then
-      if type(args.on_release) == "function" or type(args.on_press) == "function" then
+      if (args.on_release ~= nil or args.on_press ~= nil) and args.press_effect then
         button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
       end
 
-      if args.child and type(args.child.on_release) == "function" then
+      if args.child and args.child.on_release ~= nil then
         -- Simulate a button release for the child
         args.child:on_release(self, 1, 1, widget.button, {}, results)
       end
     end
     -- Same deal here but for right click
     if widget.button == 3 then
-      if type(args.on_secondary_release) == "function" or type(args.on_secondary_press) == "function" then
+      if (args.on_secondary_release ~= nil or args.on_secondary_press ~= nil) and args.press_effect then
         button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
       end
 
-      if args.child and type(args.child.on_secondary_release) == "function" then
+      if args.child and args.child.on_secondary_release ~= nil then
         -- Simulate a button release for the child
         args.child:on_secondary_release(self, 3, 3, widget.button, {}, results)
       end
     end
 
-    if args.hover_effect == true then
+    if args.hover_effect then
       button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
     end
 
-    if type(args.on_leave) == "function" then
+    if args.on_leave ~= nil then
       args.on_leave(self, results)
     end
 
-    if args.child and type(args.child.on_leave) == "function" then
+    if args.child and args.child.on_leave ~= nil then
       args.child:on_leave(self, results)
     end
   end)
@@ -256,29 +258,35 @@ function basic.normal(args)
     widget.button = button -- check mouse::leave signal
 
     if button == 1 then
-      if type(args.on_press) == "function" then
+      if (args.on_release ~= nil or args.on_press ~= nil) and args.press_effect then
         button_effect(widget, args.press_bg, args.press_border_color, args.press_border_width)
+      end
+
+      if args.on_press ~= nil then
         args.on_press(self, lx, ly, button, mods, results)
       end
 
-      if args.child and type(args.child.on_press) == "function" then
+      if args.child and args.child.on_press ~= nil then
         args.child:on_press(self, lx, ly, button, mods, results)
       end
     elseif button == 3 then
-      if type(args.on_secondary_release) == "function" then
+      if (args.on_release ~= nil or args.on_press ~= nil) and args.press_effect then
         button_effect(widget, args.press_bg, args.press_border_color, args.press_border_width)
+      end
+
+      if args.on_secondary_release ~= nil then
         args.on_secondary_press(self, lx, ly, button, mods, results)
       end
 
-      if args.child and type(args.child.on_secondary_press) == "function" then
+      if args.child and args.child.on_secondary_press ~= nil then
         args.child:on_secondary_press(self, lx, ly, button, mods, results)
       end
     elseif button == 4 then
-      if type(args.on_scroll_up) == "function" then
+      if args.on_scroll_up ~= nil then
         args.on_scroll_up(self, lx, ly, button, mods, results)
       end
     elseif button == 5 then
-      if type(args.on_scroll_down) == "function" then
+      if args.on_scroll_down ~= nil then
         args.on_scroll_down(self, lx, ly, button, mods, results)
       end
     end
@@ -292,7 +300,7 @@ function basic.normal(args)
     widget.button = nil -- check mouse::leave signal
 
     if button == 1 then
-      if args.on_release ~= nil or args.on_press ~= nil then
+      if (args.on_release ~= nil or args.on_press ~= nil) and args.press_effect then
         button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
       end
 
@@ -305,15 +313,15 @@ function basic.normal(args)
         args.child:on_release(self, lx, ly, button, mods, results)
       end
     elseif button == 3 then
-      if type(args.on_secondary_release) == "function" or type(args.on_secondary_press) == "function" then
+      if (args.on_secondary_release ~= nil or args.on_secondary_press ~= nil) and args.press_effect then
         button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
       end
 
-      if type(args.on_secondary_release) == "function_secondary" then
+      if args.on_secondary_release ~= nil then
         args.on_secondary_release(self, lx, ly, button, mods, results)
       end
 
-      if args.child and type(args.child.on_secondary_release) == "function" then
+      if args.child and args.child.on_secondary_release ~= nil then
         -- Simulate a button_secondary release for the child
         args.child:on_secondary_release(self, lx, ly, button, mods, results)
       end
@@ -371,52 +379,53 @@ function basic.state(args)
   end
 
   widget:connect_signal("mouse::enter", function(self, results)
-    if not args.hover_effect then
-      return
+    if args.hover_effect then
+      if widget.turned_on == true then
+        button_effect(widget, args.on_hover_bg, args.on_hover_border_color, args.on_hover_border_width)
+      else
+        button_effect(widget, args.hover_bg, args.hover_border_color, args.hover_border_width)
+      end
     end
 
-    if widget.turned_on then
-      button_effect(widget, args.on_hover_bg, args.on_hover_border_color, args.on_hover_border_width)
-    else
-      button_effect(widget, args.hover_bg, args.hover_border_color, args.hover_border_width)
-    end
-
-    if type(args.on_hover) == "function" then
+    if args.on_hover ~= nil then
       args.on_hover(self, results)
     end
 
-    if args.child and type(args.child.on_hover) == "function" then
+    if args.child and args.child.on_hover ~= nil then
       args.child:on_hover(self, results)
     end
   end)
 
   widget:connect_signal("mouse::leave", function(self, results)
+    if widget.button ~= nil then
+      widget:emit_signal("button::release", 1, 1, widget.button, {}, results, true)
+    end
     -- Why checking if the widget is being pressed or not?
     -- Since even if I have the mouse button *still pressed*, leaving the widget
     -- area should make me stop pressing the said widget
     if widget.button == 1 then
-      if type(args.on_release) == "function" or type(args.on_press) == "function" then
+      if (args.on_release ~= nil or args.on_press ~= nil) and args.press_effect then
         button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
       end
 
-      if args.child and type(args.child.on_release) == "function" then
+      if args.child and args.child.on_release ~= nil then
         -- Simulate a button release for the child
         args.child:on_release(self, 1, 1, widget.button, {}, results)
       end
     end
     -- Same deal here but for right click
     if widget.button == 3 then
-      if type(args.on_secondary_release) == "function" or type(args.on_secondary_press) == "function" then
+      if (args.on_secondary_release ~= nil or args.on_secondary_press ~= nil) and args.press_effect then
         button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
       end
 
-      if args.child and type(args.child.on_secondary_release) == "function" then
+      if args.child and args.child.on_secondary_release ~= nil then
         -- Simulate a button release for the child
         args.child:on_secondary_release(self, 3, 3, widget.button, {}, results)
       end
     end
 
-    if args.hover_effect == true then
+    if args.hover_effect then
       if widget.turned_on then
         button_effect(widget, args.on_normal_bg, args.on_normal_border_color, args.on_normal_border_width)
       else
@@ -424,11 +433,11 @@ function basic.state(args)
       end
     end
 
-    if type(args.on_leave) == "function" then
+    if args.on_leave ~= nil then
       args.on_leave(self, results)
     end
 
-    if args.child and type(args.child.on_leave) == "function" then
+    if args.child and args.child.on_leave ~= nil then
       args.child:on_leave(self, results)
     end
   end)
@@ -441,6 +450,18 @@ function basic.state(args)
     widget.button = button -- check mouse::leave signal
 
     if button == 1 then
+      if args.press_effect then
+        if widget.turned_on then
+          button_effect(widget, args.on_press_bg, args.on_press_border_color, args.on_press_border_width)
+        else
+          button_effect(widget, args.press_bg, args.press_border_color, args.press_border_width)
+        end
+      end
+
+      if args.on_press ~= nil then
+        args.on_press(self, lx, ly, button, mods, results)
+      end
+
       if widget.turned_on then
         widget:turn_off()
         if args.on_turn_off then
@@ -456,26 +477,28 @@ function basic.state(args)
       if args.child and type(args.child.on_press) == "function" then
         args.child:on_press(self, lx, ly, button, mods, results)
       end
-
-      if type(args.on_press) == "function" then
-        -- button_effect(widget, args.press_bg, args.press_border_color, args.press_border_width)
-        args.on_press(self, lx, ly, button, mods, results)
-      end
     elseif button == 3 then
-      if type(args.on_secondary_release) == "function" then
-        button_effect(widget, args.press_bg, args.press_border_color, args.press_border_width)
+      if args.press_effect then
+        if widget.turned_on then
+          button_effect(widget, args.on_press_bg, args.on_press_border_color, args.on_press_border_width)
+        else
+          button_effect(widget, args.press_bg, args.press_border_color, args.press_border_width)
+        end
+      end
+
+      if args.on_secondary_press ~= nil then
         args.on_secondary_press(self, lx, ly, button, mods, results)
       end
 
-      if args.child and type(args.child.on_secondary_press) == "function" then
+      if args.child and args.child.on_secondary_press ~= nil then
         args.child:on_secondary_press(self, lx, ly, button, mods, results)
       end
     elseif button == 4 then
-      if type(args.on_scroll_up) == "function" then
+      if args.on_scroll_up ~= nil then
         args.on_scroll_up(self, lx, ly, button, mods, results)
       end
     elseif button == 5 then
-      if type(args.on_scroll_down) == "function" then
+      if args.on_scroll_down ~= nil then
         args.on_scroll_down(self, lx, ly, button, mods, results)
       end
     end

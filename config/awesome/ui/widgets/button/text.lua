@@ -56,20 +56,20 @@ end
 ---@param args TextButtonArgs
 ---@return TextButtonArgs
 local function ensure_button_args(args)
-    -- stylua: ignore start
-    args = args or {}
+  -- stylua: ignore start
+  args = args or {}
 
-    -- Coloring
-    args.normal_fg = args.normal_fg or beautiful.colors.white
-    args.hover_fg = args.hover_fg or beautiful.colors.white
-    args.press_fg = args.press_fg or beautiful.colors.grey
-    args.on_normal_fg = args.on_normal_fg or beautiful.accent
-    args.on_hover_fg = args.on_hover_fg or beautiful.accent
-    args.on_press_fg = args.on_press_fg or helpers.color.darken(beautiful.accent, 10)
+  -- Coloring
+  args.normal_fg = args.normal_fg or beautiful.colors.white
+  args.hover_fg = args.hover_fg or beautiful.colors.white
+  args.press_fg = args.press_fg or beautiful.colors.grey
+  args.on_normal_fg = args.on_normal_fg or beautiful.accent
+  args.on_hover_fg = args.on_hover_fg or beautiful.accent
+  args.on_press_fg = args.on_press_fg or helpers.color.darken(beautiful.accent, 10)
 
-    -- Text
-    args.text = args.text or 'Text Button'
-    args.on_text = args.on_text or args.text
+  -- Text
+  args.text = args.text or 'Text Button'
+  args.on_text = args.on_text or args.text
 
   -- stylua: ignore end
 
@@ -118,19 +118,27 @@ function text.normal(args)
   local widget, text_widget = create_button(args, "normal")
 
   function text_widget:on_hover()
-    button_effect(widget, args.hover_fg)
+    if args.hover_effect then
+      button_effect(widget, args.hover_fg)
+    end
   end
 
   function text_widget:on_leave()
-    button_effect(widget, args.normal_fg)
+    if args.hover_effect then
+      button_effect(widget, args.normal_fg)
+    end
   end
 
   function text_widget:on_press()
-    button_effect(widget, args.press_fg)
+    if args.press_effect then
+      button_effect(widget, args.press_fg)
+    end
   end
 
   function text_widget:on_release()
-    button_effect(widget, args.normal_fg)
+    if args.press_effect then
+      button_effect(widget, args.normal_fg)
+    end
   end
 
   return widget
@@ -142,6 +150,9 @@ function text.state(args)
   local widget, text_widget = create_button(args, "state")
 
   function text_widget:on_hover(self)
+    if args.hover_effect then
+      return
+    end
     if self.turned_on then
       button_effect(widget, args.on_hover_fg)
     else
@@ -150,6 +161,9 @@ function text.state(args)
   end
 
   function text_widget:on_leave(self)
+    if args.hover_effect then
+      return
+    end
     if self.turned_on then
       button_effect(widget, args.on_normal_fg)
     else
@@ -158,12 +172,16 @@ function text.state(args)
   end
 
   function text_widget:on_turn_on()
-    button_effect(widget, args.on_press_fg)
+    if args.press_effect then
+      button_effect(widget, args.on_press_fg)
+    end
     text_widget:set_text(args.on_text)
   end
 
   function text_widget:on_turn_off()
-    button_effect(widget, args.press_fg)
+    if args.press_effect then
+      button_effect(widget, args.press_fg)
+    end
     text_widget:set_text(args.text)
   end
 
@@ -172,6 +190,9 @@ function text.state(args)
   end
 
   function text_widget:on_release()
+    if args.press_effect == false then
+      return
+    end
     if self.turned_on then
       button_effect(widget, args.on_normal_fg)
     else
