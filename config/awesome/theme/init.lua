@@ -188,6 +188,17 @@ theme.menu_button_height                    = dpi(30)
 theme.menu_button_paddings                  = dpi(4)
 theme.menu_button_submenu_caret_color       = theme.colors.grey
 
+-- Volume osd settings.
+theme.volume_osd_bg                         = theme.colors.black .. opacity_modifier
+theme.volume_osd_bar_height                 = dpi(12)
+theme.volume_osd_bar_width                  = dpi(150)
+theme.volume_osd_bar_color                  = theme.colors.yellow
+theme.volume_osd_bar_color_high             = theme.colors.red
+theme.volume_osd_bar_background_color       = theme.colors.black2 .. opacity_modifier
+theme.volume_osd_paddings                   = dpi(12)
+theme.volume_osd_icon_color                 = theme.colors.yellow
+theme.volume_osd_icon_color_mute            = theme.colors.red
+
 -- List of icon definitions.
 local nerd_font_name                        = theme.font_name
 local font_awesome_6_solid_font_name        = 'Font Awesome 6 Pro Solid'
