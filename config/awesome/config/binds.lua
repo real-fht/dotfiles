@@ -11,6 +11,7 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 local helpers = require("helpers")
 local menubar = require("menubar")
 local main_menu = require("ui.popups.main-menu")
+local pulseaudio_daemon = require("daemons.hardware.pulseaudio")
 local capi = { awesome = awesome, client = client } -- luacheck: ignore
 -- -*-
 local button, key = awful.button, awful.key
@@ -75,7 +76,15 @@ awful.keyboard.append_global_keybindings({
 })
 -------------------------------------------------------------------------------
 awful.keyboard.append_global_keybindings({
-  -- key({}, 'XF86XKAudioRaise', function() end, { group = 'Media', description = 'Raise Volume' }),
+  key({}, "XF86AudioRaiseVolume", function()
+    pulseaudio_daemon:sink_volume_up(nil, 5)
+  end, { group = "Media", description = "Raise Volume" }),
+  key({}, "XF86AudioLowerVolume", function()
+    pulseaudio_daemon:sink_volume_down(nil, 5)
+  end, { group = "Media", description = "Lower Volume" }),
+  key({}, "XF86AudioMute", function()
+    pulseaudio_daemon:sink_toggle_mute()
+  end, { group = "Media", description = "Toggle Mute" }),
 })
 -------------------------------------------------------------------------------
 awful.keyboard.append_global_keybindings({
