@@ -4,17 +4,17 @@
 ---@module 'ui.widgets.menu'
 ---------------------------------------------------------------------------------
 
-local awful = require("awful")
-local beautiful = require("beautiful")
+local awful = require "awful"
+local beautiful = require "beautiful"
 local dpi = beautiful.xresources.apply_dpi
-local gshape = require("gears.shape")
-local gtable = require("gears.table")
-local gtimer = require("gears.timer")
-local wcontainer = require("ui.widgets.container")
-local twidget = require("ui.widgets.text")
-local bwidget = require("ui.widgets.button")
-local helpers = require("helpers")
-local wibox = require("wibox")
+local gshape = require "gears.shape"
+local gtable = require "gears.table"
+local gtimer = require "gears.timer"
+local wcontainer = require "ui.widgets.container"
+local twidget = require "ui.widgets.text"
+local bwidget = require "ui.widgets.button"
+local helpers = require "helpers"
+local wibox = require "wibox"
 
 local menu = { mt = {} }
 
@@ -102,7 +102,7 @@ function menu:show(args)
 
   self.can_hide = false
 
-  gtimer({
+  gtimer {
     timeout = 0.1,
     autostart = true,
     call_now = false,
@@ -110,7 +110,7 @@ function menu:show(args)
     callback = function()
       self.can_hide = true
     end,
-  })
+  }
 
   -- Hide sub menus belonging to the menu of self
   if self.parent_menu ~= nil then
@@ -154,7 +154,7 @@ function menu:reset()
 end
 
 function menu.menu(widgets, width)
-  local widget = awful.popup({
+  local widget = awful.popup {
     x = 32500,
     type = "menu",
     visible = false,
@@ -162,12 +162,12 @@ function menu.menu(widgets, width)
     minimum_width = width or dpi(300),
     maximum_width = width or dpi(300),
     shape = gshape.rectangle,
-    bg = beautiful.menu_bg,
-    widget = wibox.widget({
+    bg = beautiful.menu.bg,
+    widget = wibox.widget {
       layout = wibox.layout.fixed.vertical,
-      spacing = beautiful.menu_button_spacing,
-    }),
-  })
+      spacing = beautiful.menu.button_spacing,
+    },
+  }
   gtable.crush(widget, menu, true)
 
   -- Hide the menu when clicking on different clients
@@ -207,11 +207,11 @@ function menu.menu(widgets, width)
   end)
 
   -- Initiate our menu widgets.
-  widget:add(helpers.ui.vertical_padding(beautiful.menu_paddings))
+  widget:add(helpers.ui.vertical_padding(beautiful.menu.paddings))
   for _, menu_widget in ipairs(widgets) do
     widget:add(menu_widget)
   end
-  widget:add(helpers.ui.vertical_padding(beautiful.menu_paddings))
+  widget:add(helpers.ui.vertical_padding(beautiful.menu.paddings))
 
   return widget
 end
@@ -230,56 +230,56 @@ function menu.button(args)
   args = args or {}
   -- -*- Args setup.
   args.icon = args.icon or nil
-  args.icon_size = args.icon_size or 12
-  args.icon_color = args.icon_color or beautiful.accent
+  args.icon_size = args.icon_size or beautiful.font_size
+  args.icon_color = args.icon_color or beautiful.menu.icon_color
   -- args.image = args.image
   args.text = args.text or ""
-  args.text_size = args.text_size or 12
+  args.text_size = args.text_size or beautiful.font_size
   args.on_press = args.on_press or nil
 
   local icon = nil
 
   if args.icon ~= nil then
     -- If there's a text icon, use it
-    icon = wcontainer({
+    icon = wcontainer {
       forced_height = args.icon_size * 2,
       forced_width = args.icon_size * 2,
       bg = beautiful.colors.transparent,
-      child = twidget({
+      child = twidget {
         font = args.icon.font,
         halign = "center",
         size = args.icon_size,
         color = args.icon_color,
         text = args.icon.icon,
-      }),
-    })
+      },
+    }
   elseif args.image ~= nil then
     -- Otherwise if there's an image, use it instead.
-    icon = wibox.widget({
+    icon = wibox.widget {
       widget = wibox.widget.imagebox,
       image = args.image,
-    })
+    }
   end
 
-  local text_widget = twidget({
+  local text_widget = twidget {
     size = args.text_size,
     text = args.text,
-  })
+  }
 
-  return bwidget.basic.normal({
-    forced_height = beautiful.menu_button_size,
+  return bwidget.basic.normal {
+    -- forced_height = beautiful.menu_button_height,
     forced_width = dpi(300),
     normal_bg = beautiful.colors.transparent,
-    hover_bg = beautiful.menu_button_hover_bg,
-    press_bg = beautiful.menu_button_press_bg,
-    paddings = beautiful.menu_button_paddings,
+    hover_bg = beautiful.menu.button_hover_bg,
+    press_bg = beautiful.menu.button_press_bg,
+    paddings = beautiful.menu.button_paddings,
     margins = {
-      left = beautiful.menu_paddings,
-      right = beautiful.menu_paddings,
+      left = beautiful.menu.paddings,
+      right = beautiful.menu.paddings,
     },
     -- margins = dpi(2),
     halign = "left",
-    shape = helpers.ui.rounded_rect(),
+    shape = beautiful.menu.button_shape,
     on_release = function(self)
       self.menu:hide(true)
       args.on_press(self, text_widget)
@@ -289,11 +289,11 @@ function menu.button(args)
     end,
     child = {
       layout = wibox.layout.fixed.horizontal,
-      spacing = dpi(6),
+      spacing = beautiful.menu.icon_text_spacing,
       icon,
       text_widget,
     },
-  })
+  }
 end
 
 ---@param args menu_button_args
@@ -301,45 +301,45 @@ function menu.sub_menu_button(args)
   args = args or {}
 
   args.icon = args.icon or nil
-  args.icon_size = args.icon_size or 12
+  args.icon_size = args.icon_size or beautiful.font_size
   args.text = args.text or ""
-  args.text_size = args.text_size or 12
+  args.text_size = args.text_size or beautiful.font_size
   args.sub_menu = args.sub_menu or nil
 
   local icon = args.icon ~= nil
-      and wcontainer({
+      and wcontainer {
         forced_height = args.icon_size * 2,
         forced_width = args.icon_size * 2,
         bg = beautiful.colors.transparent,
-        child = twidget({
+        child = twidget {
           font = args.icon.font,
           halign = "center",
           size = args.icon_size,
           color = beautiful.secondary_accent,
           text = args.icon.icon,
-        }),
-      })
+        },
+      }
     or nil
 
-  local widget = bwidget.basic.state({
-    forced_height = beautiful.menu_button_size,
+  local widget = bwidget.basic.state {
+    forced_height = beautiful.menu.button_size,
     forced_width = dpi(300),
     normal_bg = beautiful.colors.transparent,
-    hover_bg = beautiful.menu_button_hover_bg,
-    press_bg = beautiful.menu_button_press_bg,
-    paddings = beautiful.menu_button_paddings,
+    hover_bg = beautiful.menu.button_hover_bg,
+    press_bg = beautiful.menu.button_press_bg,
+    paddings = beautiful.menu.button_paddings,
     margins = {
-      left = beautiful.menu_paddings,
-      right = beautiful.menu_paddings,
+      left = beautiful.menu.paddings,
+      right = beautiful.menu.paddings,
     },
     -- margins = dpi(2),
     halign = "left",
-    shape = helpers.ui.rounded_rect(),
+    shape = beautiful.menu.button_shape,
     on_hover = function(self)
       local coords = helpers.ui.get_widget_geometry(self.menu, self)
       coords.x = coords.x + self.menu.x + self.menu.width
       coords.y = coords.y + self.menu.y
-      args.sub_menu:show({ coords = coords, offset = { x = -5 } })
+      args.sub_menu:show { coords = coords, offset = { x = -5 } }
       self:turn_on()
     end,
     child = {
@@ -347,19 +347,19 @@ function menu.sub_menu_button(args)
       forced_width = dpi(300),
       {
         layout = wibox.layout.fixed.horizontal,
-        spacing = dpi(6),
+        spacing = beautiful.menu.icon_text_spacing,
         icon,
-        twidget({ size = args.text_size, text = args.text }),
+        twidget { size = args.text_size, text = args.text },
       },
       nil,
-      twidget({
+      twidget {
         font = beautiful.icons.chevron_right.font,
         text = beautiful.icons.chevron_right.icon,
-        color = beautiful.menu_button_submenu_caret_color,
+        color = beautiful.menu.button_submenu_caret_color,
         size = 12,
-      }),
+      },
     },
-  })
+  }
 
   widget.sub_menu = args.sub_menu
 
@@ -367,17 +367,17 @@ function menu.sub_menu_button(args)
 end
 
 function menu.separator()
-  return wibox.widget({
+  return wibox.widget {
     widget = wibox.container.margin,
-    margins = beautiful.menu_paddings,
+    margins = beautiful.menu.paddings,
     {
       widget = wibox.widget.separator,
       forced_height = dpi(2),
       orientation = "horizontal",
       thickness = dpi(2),
-      color = beautiful.colors.onebg,
+      color = beautiful.menu.separator_color,
     },
-  })
+  }
 end
 
 ---@class menu_checkbox_button_args:menu_button_args
@@ -388,12 +388,12 @@ function menu.checkbox_button(args)
   args = args or {}
 
   args.icon = args.icon or nil
-  args.icon_size = args.icon_size or 12
-  args.icon_color = args.icon_color or beautiful.accent
+  args.icon_size = args.icon_size or beautiful.font_size
+  args.icon_color = args.icon_color or beautiful.menu.icon_color
   -- args.image = args.image
   args.text = args.text or ""
-  args.text_size = args.text_size or 12
-  args.checkbox_color = args.checkbox_color or beautiful.accent
+  args.text_size = args.text_size or beautiful.font_size
+  args.checkbox_color = args.checkbox_color or beautiful.menu.checkbox_color
   args.on_by_default = args.on_by_default or nil
   args.on_press = args.on_press or nil
 
@@ -401,48 +401,49 @@ function menu.checkbox_button(args)
 
   if args.icon ~= nil then
     -- If there's a text icon, use it
-    icon = wcontainer({
+    icon = wcontainer {
       forced_height = args.icon_size * 2,
       forced_width = args.icon_size * 2,
       bg = beautiful.colors.transparent,
-      child = twidget({
+      child = twidget {
         font = args.icon.font,
         halign = "center",
         size = args.icon_size,
         color = args.icon_color,
         text = args.icon.icon,
-      }),
-    })
+      },
+    }
   elseif args.image ~= nil then
     -- Otherwise if there's an image, use it instead.
-    icon = wibox.widget({
+    icon = wibox.widget {
       widget = wibox.widget.imagebox,
       image = args.image,
-    })
+    }
   end
 
-  local checkbox = twidget({
+  local checkbox = twidget {
     size = dpi(12),
     color = args.checkbox_color,
     font = beautiful.icons.toggle_on,
     halign = "right",
     text = args.on_by_default == true and beautiful.icons.toggle_on.icon or beautiful.icons.toggle_off.icon,
-  })
+  }
 
-  local widget = bwidget.basic.state({
-    forced_height = beautiful.menu_button_size,
+  local widget = bwidget.basic.state {
+    forced_height = beautiful.menu.button_size,
     forced_width = dpi(300),
     normal_bg = beautiful.colors.transparent,
-    hover_bg = beautiful.menu_button_hover_bg,
-    press_bg = beautiful.menu_button_press_bg,
+    hover_bg = beautiful.menu.button_hover_bg,
+    press_bg = beautiful.menu.button_press_bg,
     on_normal_bg = beautiful.colors.transparent,
-    on_hover_bg = beautiful.menu_button_hover_bg,
-    on_press_bg = beautiful.menu_button_press_bg,
-    paddings = beautiful.menu_button_paddings,
+    on_hover_bg = beautiful.menu.button_hover_bg,
+    on_press_bg = beautiful.menu.button_press_bg,
+    paddings = beautiful.menu.button_paddings,
     margins = {
-      left = beautiful.menu_paddings,
-      right = beautiful.menu_paddings,
+      left = beautiful.menu.paddings,
+      right = beautiful.menu.paddings,
     },
+    shape = beautiful.menu.button_shape,
     on_release = function(self)
       self.menu:hide(true)
       if args.on_press then
@@ -458,7 +459,7 @@ function menu.checkbox_button(args)
         layout = wibox.layout.fixed.horizontal,
         spacing = dpi(6),
         icon,
-        twidget({ size = args.text_size, text = args.text }),
+        twidget { size = args.text_size, text = args.text },
       },
       nil,
       checkbox,
@@ -469,7 +470,7 @@ function menu.checkbox_button(args)
     on_turn_off = function()
       checkbox:set_text(beautiful.icons.toggle_off.icon)
     end,
-  })
+  }
 
   return widget
 end

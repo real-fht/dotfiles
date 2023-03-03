@@ -4,10 +4,10 @@
 ---@module 'ui.widgets.separator'
 ---------------------------------------------------------------------------------
 
-local beautiful = require("beautiful")
+local beautiful = require "beautiful"
 local dpi = beautiful.xresources.apply_dpi
-local gshape = require("gears.shape")
-local wibox = require("wibox")
+local gshape = require "gears.shape"
+local wibox = require "wibox"
 
 ---@class WidgetsSeparatorArgs
 ---@field color string?
@@ -36,7 +36,7 @@ end
 return function(args)
   args = ensure_args(args)
 
-  return wibox.widget({
+  return wibox.widget {
     color = args.color,
     forced_height = args.orientation == "vertical" and dpi(1) or dpi(2),
     forced_width = args.orientation == "vertical" and dpi(2) or dpi(1),
@@ -46,5 +46,5 @@ return function(args)
     thickness = args.thickness,
     valign = args.valign,
     widget = wibox.widget.separator,
-  })
+  }
 end

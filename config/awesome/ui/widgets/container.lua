@@ -4,10 +4,10 @@
 ---@module 'ui.widgets.container'
 ---------------------------------------------------------------------------------
 
-local beautiful = require("beautiful")
-local wibox = require("wibox")
-local gtable = require("gears.table")
-local helpers = require("helpers")
+local beautiful = require "beautiful"
+local wibox = require "wibox"
+local gtable = require "gears.table"
+local helpers = require "helpers"
 
 local container = { mt = {} }
 
@@ -78,36 +78,36 @@ end
 ---Creates a new conatainer.
 ---@param args ContainerArgs
 local function new(args)
-    -- stylua: ignore start
-    args                     = args or {}
-    args.child               = args.child or nil
-    -- -*- wibox.container.background
-    args.bg                  = args.bg or nil
-    args.fg                  = args.fg or nil
-    args.shape               = args.shape or helpers.ui.rounded_rect(beautiful.corner_radius)
-    args.border_width        = args.border_width or 0
-    args.border_color        = args.border_color or beautiful.colors.transparent
-    args.border_strategy     = args.border_color or nil
-    args.forced_height       = args.forced_height or nil
-    args.forced_width        = args.forced_width or nil
-    args.maximum_width       = args.maximum_width or nil
-    args.maximum_height      = args.maximum_height or nil
-    args.opacity             = args.opacity or nil
-    -- -*- wibox.container.constraint
-    args.constraint_strategy = args.constraint_strategy or nil
-    args.constraint_height   = args.constraint_height or nil
-    args.constraint_width    = args.constraint_width or nil
-    -- -*- wibox.container.margin
-    args.margins             = args.margins or 0
-    args.paddings            = args.paddings or nil
-    -- -*- wibox.container.place
-    args.valign              = args.valign or nil
-    args.halign              = args.halign or nil
-    -- -*- wibox.container.rotate
-    args.direction           = args.direction or nil
+  -- stylua: ignore start
+  args                     = args or {}
+  args.child               = args.child or nil
+  -- -*- wibox.container.background
+  args.bg                  = args.bg or nil
+  args.fg                  = args.fg or nil
+  args.shape               = args.shape or helpers.ui.rounded_rect(beautiful.corner_radius)
+  args.border_width        = args.border_width or 0
+  args.border_color        = args.border_color or beautiful.colors.transparent
+  args.border_strategy     = args.border_color or nil
+  args.forced_height       = args.forced_height or nil
+  args.forced_width        = args.forced_width or nil
+  args.maximum_width       = args.maximum_width or nil
+  args.maximum_height      = args.maximum_height or nil
+  args.opacity             = args.opacity or nil
+  -- -*- wibox.container.constraint
+  args.constraint_strategy = args.constraint_strategy or nil
+  args.constraint_height   = args.constraint_height or nil
+  args.constraint_width    = args.constraint_width or nil
+  -- -*- wibox.container.margin
+  args.margins             = args.margins or 0
+  args.paddings            = args.paddings or nil
+  -- -*- wibox.container.place
+  args.valign              = args.valign or nil
+  args.halign              = args.halign or nil
+  -- -*- wibox.container.rotate
+  args.direction           = args.direction or nil
   -- stylua: ignore end
 
-  local widget = wibox.widget({
+  local widget = wibox.widget {
     widget = wibox.container.rotate,
     id = "rotate_role",
     direction = args.direction,
@@ -150,9 +150,10 @@ local function new(args)
         },
       },
     },
-  })
+  }
 
   gtable.crush(widget, container, true)
+  widget.child = widget:get_children_by_id("padding_role")[1].children[1]
 
   return widget
 end

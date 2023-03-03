@@ -3,28 +3,28 @@
 ---@copyright 2022-2023 Real Ferhat (@real-fht) <nferhat20@gmail.com>
 ---@module 'ui.notifications.box'
 -- Available theme variables:
--- notification_font
--- notification_bg
--- notification_alt_bg
--- notification_fg_low
--- notification_fg_normal
--- notification_fg_critical
+-- notification.font
+-- notification.bg
+-- notification.alt_bg
+-- notification.fg_low
+-- notification.fg_normal
+-- notification.fg_critical
 -- notificatin_paddings
--- notification_width
--- notification_height
--- notification_progressbar_bg_color
+-- notification.width
+-- notification.height
+-- notification.progressbar_bg_color
 ---------------------------------------------------------------------------------
 
-local animation = require("modules.animation")
-local awful = require("awful")
-local beautiful = require("beautiful")
+local animation = require "modules.animation"
+local awful = require "awful"
+local beautiful = require "beautiful"
 local dpi = beautiful.xresources.apply_dpi
-local gshape = require("gears.shape")
-local helpers = require("helpers")
-local icon_theme = require("modules.icon_theme")
-local naughty = require("naughty")
-local wibox = require("wibox")
-local widgets = require("ui.widgets")
+local gshape = require "gears.shape"
+local helpers = require "helpers"
+local icon_theme = require "modules.icon_theme"
+local naughty = require "naughty"
+local wibox = require "wibox"
+local widgets = require "ui.widgets"
 
 -- Default settings in case they're not set.
 naughty.persistence_enabled = true
@@ -65,12 +65,12 @@ naughty.connect_signal("added", function(n)
   end
 
   if n.app_icon == "" or n.app_icon == nil then
-    n.app_icon = icon_theme:get_icon_path("application-default-icon")
+    n.app_icon = icon_theme:get_icon_path "application-default-icon"
   end
 
   if (n.icon == "" or n.icon == nil) and n.font_icon == nil then
     n.font_icon = beautiful.message_icon
-    n.icon = icon_theme:get_icon_path("preferences-desktop-notification-bell")
+    n.icon = icon_theme:get_icon_path "preferences-desktop-notification-bell"
   end
 end)
 
@@ -81,11 +81,11 @@ end)
 
 naughty.connect_signal("request::display", function(n)
   -- Use custom accent based on notification urgency.
-  local urgency_color = beautiful["notification_fg_" .. n.urgency] or beautiful.notification_fg_normal
+  local urgency_color = beautiful["notification.fg_" .. n.urgency] or beautiful.notification.fg_normal
 
   local app_icon = nil
   if n.app_font_icon == nil then
-    app_icon = wibox.widget({
+    app_icon = wibox.widget {
       -- Don't allow app icon image to take all the space.
       widget = wibox.container.constraint,
       strategy = "max",
@@ -98,27 +98,27 @@ naughty.connect_signal("request::display", function(n)
         clip_shape = helpers.ui.rounded_rect(beautiful.border_radius),
         image = n.app_icon,
       },
-    })
+    }
   else
     -- Otherwise use font app icon.
-    app_icon = widgets.text({
+    app_icon = widgets.text {
       size = 12,
       color = urgency_color,
       -- halign = 'center',
       -- valign = 'center',
       font = n.app_font_icon.font,
       text = n.app_font_icon.icon,
-    })
+    }
   end
 
-  local app_name = widgets.text({
+  local app_name = widgets.text {
     size = 12,
     halign = "left",
     valign = "center",
     text = n.app_name:gsub("^%l", string.upper),
-  })
+  }
 
-  local dismiss_button = widgets.button.text.normal({
+  local dismiss_button = widgets.button.text.normal {
     font = beautiful.icons.xmark.font,
     text = beautiful.icons.xmark.icon,
     normal_bg = beautiful.colors.transparent,
@@ -127,25 +127,24 @@ naughty.connect_signal("request::display", function(n)
     valign = "center",
     forced_height = dpi(24),
     forced_width = dpi(24),
-    size = 12,
     on_release = function()
       n:destroy(naughty.notification_closed_reason.dismissed_by_user)
     end,
-  })
+  }
 
-  local timeout_bar = wibox.widget({
+  local timeout_bar = wibox.widget {
     widget = wibox.widget.progressbar,
     color = urgency_color,
-    background_color = beautiful.notification_progressbar_bg_color,
+    background_color = beautiful.notification.progressbar_bg_color,
     value = 0,
     forced_height = dpi(2),
     forced_width = 1,
     max_value = 100,
-  })
+  }
 
   local icon = nil
   if n.font_icon == nil then
-    icon = wibox.widget({
+    icon = wibox.widget {
       widget = wibox.container.constraint,
       strategy = "max",
       height = dpi(24),
@@ -155,42 +154,42 @@ naughty.connect_signal("request::display", function(n)
         clip_shape = helpers.ui.rounded_rect(beautiful.corner_radius),
         image = n.icon,
       },
-    })
+    }
   else
-    icon = widgets.text({
+    icon = widgets.text {
       size = 24,
       color = urgency_color,
       font = n.font_icon.font,
       text = n.font_icon.icon,
-    })
+    }
   end
 
-  local title = wibox.widget({
+  local title = wibox.widget {
     widget = wibox.container.scroll.horizontal,
     step_function = wibox.container.scroll.step_functions.waiting_nonlinear_back_and_forth,
     speed = 50,
-    widgets.text({
+    widgets.text {
       size = 12,
       bold = true,
       text = n.title,
-    }),
-  })
+    },
+  }
 
-  local message = widgets.text({
+  local message = widgets.text {
     size = 12,
     text = n.message,
-  })
+  }
 
-  local actions = wibox.widget({
+  local actions = wibox.widget {
     layout = wibox.layout.flex.horizontal,
     fill_space = true,
     spacing = dpi(15),
-  })
+  }
 
   for _, action in ipairs(n.actions) do
-    local button = widgets.button.text.normal({
+    local button = widgets.button.text.normal {
       size = 12,
-      paddings = beautiful.notification_paddings,
+      paddings = beautiful.notification.paddings,
       normal_bg = beautiful.colors.transparent,
       normal_fg = beautiful.colors.white,
       text = action.name,
@@ -199,30 +198,34 @@ naughty.connect_signal("request::display", function(n)
       on_press = function()
         action:invoke()
       end,
-    })
+    }
     actions:add(button)
   end
 
-  local n_box = naughty.layout.box({
+  local n_box = naughty.layout.box {
     notification = n,
     border_width = 0,
     border_color = beautiful.accent,
     hide_on_right_click = false,
-    maximum_width = beautiful.notification_width,
+    maximum_width = beautiful.notification.width,
     shape = gshape.rectangle,
-    maximum_height = beautiful.notification_height,
+    maximum_height = beautiful.notification.height,
     offset = { y = dpi(10) }, -- spacing between notifications
     screen = awful.screen.focused(),
+    position = ({
+      top = "bottom_right",
+      bottom = "top_right",
+    })[beautiful.wibar.position],
     -- How the notificatin should appear?
     widget_template = {
       layout = wibox.layout.fixed.vertical,
       spacing = 0,
       {
         widget = wibox.container.background,
-        bg = beautiful.notification_alt_bg,
+        bg = beautiful.notification.alt_bg,
         {
           widget = wibox.container.margin,
-          margins = beautiful.notification_paddings,
+          margins = beautiful.notification.paddings,
           {
             layout = wibox.layout.align.horizontal,
             spacing = dpi(8),
@@ -241,7 +244,7 @@ naughty.connect_signal("request::display", function(n)
       timeout_bar,
       {
         widget = wibox.container.margin,
-        margins = beautiful.notification_paddings,
+        margins = beautiful.notification.paddings,
         {
           layout = wibox.layout.fixed.vertical,
           {
@@ -255,18 +258,19 @@ naughty.connect_signal("request::display", function(n)
             },
           },
           actions,
-          -- {
-          --     layout = wibox.layout.fixed.horizontal,
-          --     helpers.ui.vertical_padding(dpi(8)),
-          --     wibox.container.place(actions),
-          -- },
+          {
+            layout = wibox.layout.fixed.horizontal,
+            visible = #actions.children > 0,
+            helpers.ui.vertical_padding(dpi(8)),
+            wibox.container.place(actions),
+          },
         },
       },
     },
-  })
+  }
   n_box.buttons = {}
 
-  local anim = animation:new({
+  local anim = animation:new {
     duration = n.timeout,
     target = 100,
     easing = animation.easing.linear,
@@ -274,7 +278,7 @@ naughty.connect_signal("request::display", function(n)
     update = function(self, pos)
       timeout_bar.value = pos
     end,
-  })
+  }
 
   anim:connect_signal("ended", function()
     n:destroy()

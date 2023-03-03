@@ -6,12 +6,12 @@
 
 -- NOTE: This is now managed by nixos automatically at X server startup.
 
-local beautiful = require("beautiful")
-local wallpaper = require("modules.bling.module.wallpaper")
+local beautiful = require "beautiful"
+local wallpaper = require "modules.bling.module.wallpaper"
 
 -- Lazy wallpaper setup using Bling!
-wallpaper.setup({
+wallpaper.setup {
   wallpaper = beautiful.wallpaper,
   position = "maximized",
   scale = 1,
-})
+}

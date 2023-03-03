@@ -4,27 +4,27 @@
 ---@module 'ui.widgets.screen-mask'
 ---------------------------------------------------------------------------------
 
-local awful = require("awful")
-local beautiful = require("beautiful")
-local wibox = require("wibox")
+local awful = require "awful"
+local beautiful = require "beautiful"
+local wibox = require "wibox"
 
 local screen_mask = { mt = {} }
 
 function screen_mask.background(s)
-  local background = wibox.widget({
+  local background = wibox.widget {
     widget = wibox.widget.imagebox,
     resize = true,
     horizontal_fit_policy = "fit",
     vertical_fit_policy = "fit",
     image = beautiful.wallpaper,
-  })
+  }
 
-  local blur = wibox.widget({
+  local blur = wibox.widget {
     widget = wibox.container.background,
     bg = beautiful.colors.black,
-  })
+  }
 
-  return awful.popup({
+  return awful.popup {
     type = "splash",
     screen = s,
     placement = awful.placement.maximize,
@@ -35,7 +35,7 @@ function screen_mask.background(s)
       background,
       blur,
     },
-  })
+  }
 end
 
 return setmetatable(screen_mask, screen_mask.mt)

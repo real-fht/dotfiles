@@ -18,11 +18,11 @@
 
 local table = table
 
-local lgi = require("lgi")
+local lgi = require "lgi"
 local Gio = lgi.Gio
 local GObject = lgi.GObject
 
-local Proxy = require("modules.dbus_proxy._proxy")
+local Proxy = require "modules.dbus_proxy._proxy"
 
 local monitored = {}
 

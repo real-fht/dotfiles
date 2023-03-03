@@ -5,11 +5,11 @@
 ---Copied from andOrlando/rubato
 ---------------------------------------------------------------------------------
 
-local gobject = require("gears.object")
+local gobject = require "gears.object"
 
 -- Kidna copying awesotre's stores on a surface level for added compatibility
 local function subscribable()
-  local obj = gobject({})
+  local obj = gobject {}
   local subscribed = {}
 
   -- Subscrubes a function to the object so that it's called when `fire` is

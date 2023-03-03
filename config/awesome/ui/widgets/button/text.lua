@@ -4,12 +4,12 @@
 ---@module 'ui.widgets.button.text'
 ---------------------------------------------------------------------------------
 
-local animation = require("modules.animation")
-local beautiful = require("beautiful")
-local basic = require("ui.widgets.button.basic")
-local gtable = require("gears.table")
-local helpers = require("helpers")
-local twidget = require("ui.widgets.text")
+local animation = require "modules.animation"
+local beautiful = require "beautiful"
+local basic = require "ui.widgets.button.basic"
+local gtable = require "gears.table"
+local helpers = require "helpers"
+local twidget = require "ui.widgets.text"
 
 local text = { mt = {} }
 
@@ -60,12 +60,12 @@ local function ensure_button_args(args)
   args = args or {}
 
   -- Coloring
-  args.normal_fg = args.normal_fg or beautiful.colors.white
-  args.hover_fg = args.hover_fg or beautiful.colors.white
-  args.press_fg = args.press_fg or beautiful.colors.grey
-  args.on_normal_fg = args.on_normal_fg or beautiful.accent
-  args.on_hover_fg = args.on_hover_fg or beautiful.accent
-  args.on_press_fg = args.on_press_fg or helpers.color.darken(beautiful.accent, 10)
+  args.normal_fg = args.normal_fg or beautiful.text_button.normal_fg
+  args.hover_fg = args.hover_fg or helpers.color.lighten(args.normal_fg, 10)
+  args.press_fg = args.press_fg or helpers.color.darken(args.normal_fg, 10)
+  args.on_normal_fg = args.on_normal_fg or helpers.color.lighten(args.normal_fg, 15)
+  args.on_hover_fg = args.on_hover_fg or helpers.color.lighten(args.on_normal_fg, 10)
+  args.on_press_fg = args.on_press_fg or helpers.color.darken(args.on_normal_fg, 10)
 
   -- Text
   args.text = args.text or 'Text Button'
@@ -93,14 +93,14 @@ local function create_button(args, type_)
   gtable.crush(widget, text_widget_generic)
   widget._private.text = text_widget
 
-  widget.text_animation = animation:new({
+  widget.text_animation = animation:new {
     pos = helpers.color.hex_to_rgba(args.normal_fg),
     easing = animation.easing.linear,
     duration = 1 / 4,
     update = function(_, pos)
       text_widget:set_color(helpers.color.rgba_to_hex(pos))
     end,
-  })
+  }
 
   return widget, text_widget
 end
@@ -151,52 +151,51 @@ function text.state(args)
 
   function text_widget:on_hover(self)
     if args.hover_effect then
-      return
-    end
-    if self.turned_on then
-      button_effect(widget, args.on_hover_fg)
-    else
-      button_effect(widget, args.hover_fg)
+      if self._private.state == true then
+        button_effect(widget, args.on_hover_fg)
+      else
+        button_effect(widget, args.hover_fg)
+      end
     end
   end
 
   function text_widget:on_leave(self)
     if args.hover_effect then
-      return
-    end
-    if self.turned_on then
-      button_effect(widget, args.on_normal_fg)
-    else
-      button_effect(widget, args.normal_fg)
+      if self._private.state then
+        button_effect(widget, args.on_normal_fg)
+      else
+        button_effect(widget, args.normal_fg)
+      end
     end
   end
 
   function text_widget:on_turn_on()
-    if args.press_effect then
+    if args.press_effect == true then
       button_effect(widget, args.on_press_fg)
     end
     text_widget:set_text(args.on_text)
+    button_effect(widget, args.on_normal_fg)
   end
 
   function text_widget:on_turn_off()
-    if args.press_effect then
+    if args.press_effect == true then
       button_effect(widget, args.press_fg)
     end
     text_widget:set_text(args.text)
+    button_effect(widget, args.normal_fg)
   end
 
-  if args.on_by_default then
+  if args.on_by_default == true then
     text_widget:on_turn_on()
   end
 
   function text_widget:on_release()
     if args.press_effect == false then
-      return
-    end
-    if self.turned_on then
-      button_effect(widget, args.on_normal_fg)
-    else
-      button_effect(widget, args.normal_fg)
+      if self._private.state == true then
+        button_effect(widget, args.on_normal_fg)
+      else
+        button_effect(widget, args.normal_fg)
+      end
     end
   end
 

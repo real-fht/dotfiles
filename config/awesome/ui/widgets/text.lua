@@ -4,10 +4,10 @@
 ---@module 'ui.widgets.text'
 ---------------------------------------------------------------------------------
 
-local beautiful = require("beautiful")
-local gtable = require("gears.table")
-local gstring = require("gears.string")
-local wibox = require("wibox")
+local beautiful = require "beautiful"
+local gtable = require "gears.table"
+local gstring = require "gears.string"
+local wibox = require "wibox"
 
 local text = { mt = {} }
 
@@ -59,8 +59,8 @@ end
 function text:set_text(_text)
   self._private.text = _text
   generate_markup(self)
-  self:emit_signal("layout::changed")
-  self:emit_signal("widget::redraw_needed")
+  self:emit_signal "layout::changed"
+  self:emit_signal "widget::redraw_needed"
 end
 
 ---Create a new text widget
@@ -78,12 +78,12 @@ local function new(args)
     args.valign = args.valign or nil
   -- stylua: ignore end
 
-  local widget = wibox.widget({
+  local widget = wibox.widget {
     widget = wibox.widget.textbox,
     font = string.format("%s %d", args.font, args.size),
     halign = args.halign,
     valign = args.valign,
-  })
+  }
 
   gtable.crush(widget, text, true)
 

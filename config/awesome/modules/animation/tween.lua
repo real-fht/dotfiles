@@ -14,8 +14,8 @@
 -- c = change == ending - beginning
 -- d = duration == running time. How much time has passed *right now*
 
-local gobject = require("gears.object")
-local gtable = require("gears.table")
+local gobject = require "gears.object"
+local gtable = require "gears.table"
 
 local tween = {
   _VERSION = "tween 2.1.1",
@@ -555,7 +555,7 @@ function tween.new(args)
   args.easing = getEasingFunction(args.easing)
   checkNewParams(args.initial, args.duration, args.subject, args.target, args.easing)
 
-  local ret = gobject({})
+  local ret = gobject {}
   ret.clock = 0
 
   gtable.crush(ret, args, true)

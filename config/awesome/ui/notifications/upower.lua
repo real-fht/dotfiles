@@ -4,9 +4,9 @@
 ---@module 'ui.notifications.upower'
 ---------------------------------------------------------------------------------
 
-local beautiful = require("beautiful")
-local upower_daemon = require("daemons.hardware.upower")
-local naughty = require("naughty")
+local beautiful = require "beautiful"
+local upower_daemon = require "daemons.hardware.upower"
+local naughty = require "naughty"
 
 local UPower_DeviceState = {
   Unknown = 0,
@@ -24,40 +24,43 @@ local display_charging, display_full, display_low = true, true, true
 upower_daemon:connect_signal("battery::update", function(_, device)
   -- {{{Charging notification
   if display_charging and device.State == UPower_DeviceState.Charging then
-    naughty.notification({
+    naughty.notification {
       app_name = "UPower",
       app_font_icon = beautiful.icons.car_battery,
       font_icon = beautiful.icons.battery_bolt,
       title = "Battery Status",
+      timeout = 3,
       text = string.format("Charging! (Currently at %d%%)", device.Percentage),
-    })
+    }
     display_charging = false
   end
   --}}}
 
   --{{{Full charge notification
   if display_full and device.State == UPower_DeviceState.Fully_charged then
-    naughty.notification({
+    naughty.notification {
       app_name = "UPower",
       app_font_icon = beautiful.icons.car_battery,
       font_icon = beautiful.icons.battery_full,
       title = "Battery Status",
+      timeout = 3,
       text = "Fully Charged!",
-    })
+    }
     display_full = false
   end
   --}}}
 
   --{{{Full charge notification
   if display_low and device.State == UPower_DeviceState.Discharging and device.Percentage <= 20 then
-    naughty.notification({
+    naughty.notification {
       app_name = "UPower",
       app_font_icon = beautiful.icons.car_battery,
       font_icon = beautiful.icons.battery_full,
       urgency = "critical",
+      timeout = 3,
       title = "Battery Status",
       text = string.format("Running low on battery\n(%d%% remaining!)", device.Percentage),
-    })
+    }
     display_low = false
   end
   --}}}

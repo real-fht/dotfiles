@@ -4,7 +4,7 @@
 ---@module 'ui.widgets.button'
 ---------------------------------------------------------------------------------
 
-local basic = require("ui.widgets.button.basic")
-local text = require("ui.widgets.button.text")
+local basic = require "ui.widgets.button.basic"
+local text = require "ui.widgets.button.text"
 
 return { basic = basic, text = text }

@@ -6,10 +6,11 @@
 
 local M = {}
 
-local beautiful = require("beautiful")
-local gshape = require("gears.shape")
-local gmatrix = require("gears.matrix")
-local wibox = require("wibox")
+local awful = require "awful"
+local beautiful = require "beautiful"
+local gshape = require "gears.shape"
+local gmatrix = require "gears.matrix"
+local wibox = require "wibox"
 local capi = { mouse = mouse } -- luacheck: ignore
 
 ---Generate markup for given text
@@ -40,13 +41,13 @@ end
 ---Create a empty vertical padding of given size
 ---@param size number
 function M.vertical_padding(size)
-  return wibox.widget({ widget = wibox.widget.place, forced_height = size })
+  return wibox.widget { widget = wibox.widget.place, forced_height = size }
 end
 
 ---Create a empty horizontal padding of given size
 ---@param size
 function M.horizontal_padding(size)
-  return wibox.widget({ widget = wibox.widget.place, forced_width = size })
+  return wibox.widget { widget = wibox.widget.place, forced_width = size }
 end
 
 ---Add a hover cursor effect on a given widget.
@@ -86,6 +87,31 @@ end
 
 function M.get_widget_geometry(wibox, widget)
   return _get_widget_geometry(wibox._drawable._widget_hierarchy, widget)
+end
+
+function M.hide_on_outside_click(self)
+  awful.mouse.append_client_mousebinding(awful.button({ "Any" }, 1, function()
+    self:hide(true)
+  end))
+  -- -*-
+  awful.mouse.append_client_mousebinding(awful.button({ "Any" }, 3, function()
+    self:hide(true)
+  end))
+  -- And hide the menu when clicking on the root window
+  awful.mouse.append_global_mousebinding(awful.button({ "Any" }, 1, function()
+    self:hide(true)
+  end))
+  -- -*-
+  awful.mouse.append_global_mousebinding(awful.button({ "Any" }, 3, function()
+    self:hide(true)
+  end))
+end
+
+function M.hide_on_tag_change(self)
+  -- Hide when changing tags
+  tag.connect_signal("property::selected", function()
+    self:hide()
+  end)
 end
 
 return M

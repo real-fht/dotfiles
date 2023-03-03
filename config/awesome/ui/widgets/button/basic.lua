@@ -4,11 +4,10 @@
 ---@module 'ui.widgets.button.basic'
 ---------------------------------------------------------------------------------
 
-local animation = require("modules.animation")
-local beautiful = require("beautiful")
-local dpi = beautiful.xresources.apply_dpi
-local helpers = require("helpers")
-local wcontainer = require("ui.widgets.container")
+local animation = require "modules.animation"
+local beautiful = require "beautiful"
+local helpers = require "helpers"
+local wcontainer = require "ui.widgets.container"
 
 local basic = { mt = {} }
 
@@ -18,28 +17,19 @@ local basic = { mt = {} }
 ---@field down number?
 ---@field right number?
 
----@enum HorizontalAlignement "left"|"center"|"right"
----@enum VerticalAlignement "top"|"center"|"bottom"
+---@class HorizontalAlignement "left"|"center"|"right"
+---@class VerticalAlignement "top"|"center"|"bottom"
 
----@class BasicButtonArgs
+---@class BasicButtonArgs:ContainerArgs
 ---@field normal_bg              string?
 ---@field hover_bg               string?
 ---@field press_bg               string?
----@field on_normal_bg           string?
----@field on_hover_bg            string?
----@field on_press_bg            string?
 ---@field normal_border_width    number?
 ---@field hover_border_width     number?
 ---@field press_border_width     number?
----@field on_normal_border_width number?
----@field on_hover_border_width  number?
----@field on_press_border_width  number?
 ---@field normal_border_color    string?
 ---@field hover_border_color     string?
 ---@field press_border_color     string?
----@field on_normal_border_color string?
----@field on_hover_border_color  string?
----@field on_press_border_color  string?
 ---@field on_hover               function?
 ---@field on_leave               function?
 ---@field on_press               function?
@@ -48,51 +38,58 @@ local basic = { mt = {} }
 ---@field on_secondary_release   function?
 ---@field on_scroll_up           function?
 ---@field on_scroll_down         function?
----@field on_turn_on             function?
----@field on_turn_off            function?
----@field forced_width           number?
----@field forced_height          number?
----@field shape                  any?
----@field margins                number|MarginsOrPaddings
----@field paddings               number|MarginsOrPaddings?
 ---@field halign                 HorizontalAlignement?
 ---@field valign                 VerticalAlignement?
 ---@field hover_effect           boolean?
 ---@field press_effect           boolean?
----@field on_by_default          boolean?
 ---@field child                  BasicButtonArgs
 
+---@class BasicButtonStateArgs:BasicButtonArgs
+---@field on_normal_bg           string?
+---@field on_hover_bg            string?
+---@field on_press_bg            string?
+---@field on_normal_border_width number?
+---@field on_hover_border_width  number?
+---@field on_press_border_width  number?
+---@field on_normal_border_color string?
+---@field on_hover_border_color  string?
+---@field on_press_border_color  string?
+---@field on_turn_on             function?
+---@field on_turn_off            function?
+---@field on_by_default          boolean?
+---@field child                  BasicButtonStateArgs
+
 ---Ensures that all the required arguments are met for a button
----@param args BasicButtonArgs
----@return BasicButtonArgs
+---@param args BasicButtonArgs|BasicButtonStateArgs?
+---@return BasicButtonArgs|BasicButtonStateArgs?
 local function ensure_button_args(args)
   -- stylua: ignore start
   args                        = args or {}
 
   -- Coloring
-  args.normal_bg              = args.normal_bg or beautiful.colors.black2
-  args.hover_bg               = args.hover_bg or helpers.color.lighten(args.normal_bg, 15)
-  args.press_bg               = args.press_bg or helpers.color.darken(args.normal_bg, 15)
+  args.normal_bg              = args.normal_bg or beautiful.basic_button.normal_bg
+  args.hover_bg               = args.hover_bg or helpers.color.lighten(args.normal_bg, 10)
+  args.press_bg               = args.press_bg or helpers.color.darken(args.normal_bg, 10)
   -- -*-
-  args.on_normal_bg           = args.on_normal_bg or helpers.color.lighten(args.normal_bg, 5)
-  args.on_hover_bg            = args.on_hover_bg or helpers.color.lighten(args.normal_bg, 20)
-  args.on_press_bg            = args.on_press_bg or helpers.color.darken(args.normal_bg, 10)
+  args.on_normal_bg           = args.on_normal_bg or helpers.color.lighten(args.normal_bg, 15)
+  args.on_hover_bg            = args.on_hover_bg or helpers.color.lighten(args.on_normal_bg, 10)
+  args.on_press_bg            = args.on_press_bg or helpers.color.darken(args.on_normal_bg, 10)
 
   -- Border width
-  args.normal_border_width    = args.normal_border_width or 0
-  args.hover_border_width     = args.hover_border_width or 0
-  args.press_border_width     = args.press_border_width or 0
-  args.on_normal_border_width = args.on_normal_border_width or 0
-  args.on_hover_border_width  = args.on_hover_border_width or 0
-  args.on_press_border_width  = args.on_press_border_width or 0
+  args.normal_border_width    = args.normal_border_width or beautiful.basic_button.normal_border_width
+  args.hover_border_width     = args.hover_border_width or beautiful.basic_button.hover_border_width
+  args.press_border_width     = args.press_border_width or beautiful.basic_button.press_border_width
+  args.on_normal_border_width = args.on_normal_border_width or beautiful.basic_button.on_normal_border_width
+  args.on_hover_border_width  = args.on_hover_border_width or beautiful.basic_button.on_hover_border_width
+  args.on_press_border_width  = args.on_press_border_width or beautiful.basic_button.on_press_border_width
 
   -- Border color
-  args.normal_border_color    = args.normal_border_color or beautiful.colors.transparent
-  args.hover_border_color     = args.hover_border_color or beautiful.colors.transparent
-  args.press_border_color     = args.press_border_color or beautiful.colors.transparent
-  args.on_normal_border_color = args.on_normal_border_color or beautiful.colors.transparent
-  args.on_hover_border_color  = args.on_hover_border_color or beautiful.colors.transparent
-  args.on_press_border_color  = args.on_press_border_color or beautiful.colors.transparent
+  args.normal_border_color    = args.normal_border_color or beautiful.basic_button.normal_border_color
+  args.hover_border_color     = args.hover_border_color or beautiful.basic_button.hover_border_color
+  args.press_border_color     = args.press_border_color or beautiful.basic_button.press_border_color
+  args.on_normal_border_color = args.on_normal_border_color or beautiful.basic_button.on_normal_border_color
+  args.on_hover_border_color  = args.on_hover_border_color or beautiful.basic_button.on_hover_border_color
+  args.on_press_border_color  = args.on_press_border_color or beautiful.basic_button.on_press_border_color
 
   -- Callbacks
   args.on_hover               = args.on_hover or nil
@@ -109,9 +106,9 @@ local function ensure_button_args(args)
   -- Arguments for the button container
   args.forced_width           = args.forced_width or nil
   args.forced_height          = args.forced_height or nil
-  args.shape                  = args.shape or helpers.ui.rounded_rect(beautiful.border_radius)
-  args.margins                = args.margins or dpi(0)
-  args.paddings               = args.paddings or dpi(0)
+  args.shape                  = args.shape or beautiful.basic_button.shape
+  args.margins                = args.margins or beautiful.basic_button.margins
+  args.paddings               = args.paddings or beautiful.basic_button.paddings
   args.halign                 = args.halign or "center"
   args.valign                 = args.valign or "center"
 
@@ -165,7 +162,7 @@ local function create_button(args)
   end
 
   -- Color, border{width/color} animation
-  widget.animation = animation:new({
+  widget.animation = animation:new {
     pos = {
       bg = helpers.color.hex_to_rgba(args.normal_bg),
       border_color = helpers.color.hex_to_rgba(args.normal_border_color),
@@ -186,7 +183,7 @@ local function create_button(args)
         widget:set_border_width(pos.border_width)
       end
     end,
-  })
+  }
 
   return widget
 end
@@ -194,11 +191,15 @@ end
 ---Creates a basic button, with no state management.
 ---@param args BasicButtonArgs
 function basic.normal(args)
+  ---@type BasicButtonArgs
   args = ensure_button_args(args)
   local widget = create_button(args)
 
   widget:connect_signal("mouse::enter", function(self, results)
-    if args.hover_effect then
+    -- Only make the hover effect if there's a purpose, for example, a on_press, on_leave,
+    -- or even a on_hover callback to execute.
+    -- It wouldn't make sense to indicate that the button is being hovered if there's nothing to execute
+    if args.hover_effect == true and (args.on_hover ~= nil or args.on_leave ~= nil or args.on_press ~= nil) then
       button_effect(widget, args.hover_bg, args.hover_border_color, args.hover_border_width)
     end
 
@@ -216,7 +217,7 @@ function basic.normal(args)
     -- Since even if I have the mouse button *still pressed*, leaving the widget
     -- area should make me stop pressing the said widget
     if widget.button == 1 then
-      if (args.on_release ~= nil or args.on_press ~= nil) and args.press_effect then
+      if args.press_effect == true and (args.on_release ~= nil or args.on_press ~= nil) then
         button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
       end
 
@@ -227,7 +228,7 @@ function basic.normal(args)
     end
     -- Same deal here but for right click
     if widget.button == 3 then
-      if (args.on_secondary_release ~= nil or args.on_secondary_press ~= nil) and args.press_effect then
+      if args.press_effect == true and (args.on_secondary_release ~= nil or args.on_secondary_press ~= nil) then
         button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
       end
 
@@ -237,7 +238,7 @@ function basic.normal(args)
       end
     end
 
-    if args.hover_effect then
+    if args.hover_effect and (args.on_hover ~= nil or args.on_press ~= nil or args.on_leave ~= nil) then
       button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
     end
 
@@ -251,14 +252,14 @@ function basic.normal(args)
   end)
 
   widget:connect_signal("button::press", function(self, lx, ly, button, mods, results)
-    -- if #mods > 0 then
-    --     return
-    -- end
+    if #mods > 0 then
+      return
+    end
 
     widget.button = button -- check mouse::leave signal
 
     if button == 1 then
-      if (args.on_release ~= nil or args.on_press ~= nil) and args.press_effect then
+      if args.press_effect == true and (args.on_release ~= nil or args.on_press ~= nil) then
         button_effect(widget, args.press_bg, args.press_border_color, args.press_border_width)
       end
 
@@ -270,12 +271,12 @@ function basic.normal(args)
         args.child:on_press(self, lx, ly, button, mods, results)
       end
     elseif button == 3 then
-      if (args.on_release ~= nil or args.on_press ~= nil) and args.press_effect then
+      if args.press_effect == true and (args.on_secondary_release ~= nil or args.on_secondary_press ~= nil) then
         button_effect(widget, args.press_bg, args.press_border_color, args.press_border_width)
       end
 
       if args.on_secondary_release ~= nil then
-        args.on_secondary_press(self, lx, ly, button, mods, results)
+        args.on_secondary_release(self, lx, ly, button, mods, results)
       end
 
       if args.child and args.child.on_secondary_press ~= nil then
@@ -300,7 +301,7 @@ function basic.normal(args)
     widget.button = nil -- check mouse::leave signal
 
     if button == 1 then
-      if (args.on_release ~= nil or args.on_press ~= nil) and args.press_effect then
+      if args.press_effect == true and (args.on_release ~= nil or args.on_press ~= nil) then
         button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
       end
 
@@ -313,7 +314,7 @@ function basic.normal(args)
         args.child:on_release(self, lx, ly, button, mods, results)
       end
     elseif button == 3 then
-      if (args.on_secondary_release ~= nil or args.on_secondary_press ~= nil) and args.press_effect then
+      if args.press_effect == true and (args.on_secondary_release ~= nil or args.on_secondary_press ~= nil) then
         button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
       end
 
@@ -334,53 +335,53 @@ end
 ---Creates a basic button, with no state management.
 ---@param args BasicButtonArgs
 function basic.state(args)
+  ---@type BasicButtonStateArgs
   args = ensure_button_args(args)
   local widget = create_button(args)
-  widget.turned_on = false ---@type boolean
+  widget._private.state = false ---@type boolean
 
   function widget:turn_on()
-    if widget.turned_on then
-      return
+    if widget._private.state == false then
+      button_effect(widget, args.on_normal_bg, args.on_normal_border_color, args.on_normal_border_width)
+      -- Required for text button to work.
+      if args.child and args.child.on_turn_on then
+        args.child:on_turn_on()
+      end
+      -- Update then the state
+      widget._private.state = true
     end
-
-    button_effect(widget, args.on_normal_bg, args.on_normal_border_color, args.on_normal_border_width)
-
-    if args.child and args.child.on_turn_on then
-      args.child:on_turn_on()
-    end
-
-    widget.turned_on = true
   end
 
   function widget:turn_off()
-    if not widget.turned_on then
-      return
+    if widget._private.state == true then
+      button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
+      -- Required for text button
+      if args.child and args.child.on_turn_off then
+        args.child:on_turn_off()
+      end
+      -- Update then the state
+      widget._private.state = false
     end
-
-    button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
-
-    if args.child and args.child.on_turn_off then
-      args.child:on_turn_off()
-    end
-
-    widget.turned_on = false
   end
 
   function widget:toggle()
-    if widget.turned_on then
+    if widget._private.state then
       widget:turn_off()
     else
       widget:turn_on()
     end
   end
 
-  if args.on_by_default then
+  if args.on_by_default == true then
     widget:turn_on()
   end
 
   widget:connect_signal("mouse::enter", function(self, results)
-    if args.hover_effect then
-      if widget.turned_on == true then
+    -- Only make the hover effect if there's a purpose, for example, a on_press, on_leave,
+    -- or even a on_hover callback to execute.
+    -- It wouldn't make sense to indicate that the button is being hovered if there's nothing to execute
+    if args.hover_effect == true and (args.on_hover ~= nil or args.on_leave ~= nil or args.on_press ~= nil) then
+      if widget._private.state == true then
         button_effect(widget, args.on_hover_bg, args.on_hover_border_color, args.on_hover_border_width)
       else
         button_effect(widget, args.hover_bg, args.hover_border_color, args.hover_border_width)
@@ -390,7 +391,6 @@ function basic.state(args)
     if args.on_hover ~= nil then
       args.on_hover(self, results)
     end
-
     if args.child and args.child.on_hover ~= nil then
       args.child:on_hover(self, results)
     end
@@ -398,35 +398,13 @@ function basic.state(args)
 
   widget:connect_signal("mouse::leave", function(self, results)
     if widget.button ~= nil then
+      -- The additional true at the end is to determine if the signal is either a true
+      -- signal or a fake simulated signal.
       widget:emit_signal("button::release", 1, 1, widget.button, {}, results, true)
     end
-    -- Why checking if the widget is being pressed or not?
-    -- Since even if I have the mouse button *still pressed*, leaving the widget
-    -- area should make me stop pressing the said widget
-    if widget.button == 1 then
-      if (args.on_release ~= nil or args.on_press ~= nil) and args.press_effect then
-        button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
-      end
 
-      if args.child and args.child.on_release ~= nil then
-        -- Simulate a button release for the child
-        args.child:on_release(self, 1, 1, widget.button, {}, results)
-      end
-    end
-    -- Same deal here but for right click
-    if widget.button == 3 then
-      if (args.on_secondary_release ~= nil or args.on_secondary_press ~= nil) and args.press_effect then
-        button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
-      end
-
-      if args.child and args.child.on_secondary_release ~= nil then
-        -- Simulate a button release for the child
-        args.child:on_secondary_release(self, 3, 3, widget.button, {}, results)
-      end
-    end
-
-    if args.hover_effect then
-      if widget.turned_on then
+    if args.hover_effect == true and (args.on_hover ~= nil or args.on_leave ~= nil or args.on_press ~= nil) then
+      if widget._private.state == true then
         button_effect(widget, args.on_normal_bg, args.on_normal_border_color, args.on_normal_border_width)
       else
         button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
@@ -434,24 +412,23 @@ function basic.state(args)
     end
 
     if args.on_leave ~= nil then
-      args.on_leave(self, results)
+      args.on_leave(self, results, self._private.state)
     end
-
     if args.child and args.child.on_leave ~= nil then
-      args.child:on_leave(self, results)
+      args.child:on_leave(self, results, self._private.state)
     end
   end)
 
   widget:connect_signal("button::press", function(self, lx, ly, button, mods, results)
-    -- if #mods > 0 then
-    --     return
-    -- end
+    if #mods > 0 then
+      return
+    end
 
     widget.button = button -- check mouse::leave signal
 
     if button == 1 then
-      if args.press_effect then
-        if widget.turned_on then
+      if args.press_effect == true and (args.on_press ~= nil or args.on_release ~= nil) then
+        if widget._private.state == true then
           button_effect(widget, args.on_press_bg, args.on_press_border_color, args.on_press_border_width)
         else
           button_effect(widget, args.press_bg, args.press_border_color, args.press_border_width)
@@ -462,24 +439,24 @@ function basic.state(args)
         args.on_press(self, lx, ly, button, mods, results)
       end
 
-      if widget.turned_on then
-        widget:turn_off()
-        if args.on_turn_off then
-          args.on_turn_off(self, lx, ly, button, mods, results)
-        end
-      elseif not widget.turned_on then
-        widget:turn_on()
-        if args.on_turn_on then
-          args.on_turn_on(self, lx, ly, button, mods, results)
-        end
-      end
-
       if args.child and type(args.child.on_press) == "function" then
         args.child:on_press(self, lx, ly, button, mods, results)
       end
+
+      if widget._private.state == false then
+        widget:turn_on()
+        if args.on_turn_on ~= nil then
+          args.on_turn_on(self, lx, ly, button, mods, results)
+        end
+      elseif widget._private.state == true then
+        widget:turn_off()
+        if args.on_turn_off ~= nil then
+          args.on_turn_off(self, lx, ly, button, mods, results)
+        end
+      end
     elseif button == 3 then
-      if args.press_effect then
-        if widget.turned_on then
+      if args.press_effect == true and (args.on_secondary_press ~= nil or args.on_secondary_release ~= nil) then
+        if widget._private.state then
           button_effect(widget, args.on_press_bg, args.on_press_border_color, args.on_press_border_width)
         else
           button_effect(widget, args.press_bg, args.press_border_color, args.press_border_width)
@@ -512,8 +489,8 @@ function basic.state(args)
     widget.button = nil -- check mouse::leave signal
 
     if button == 1 then
-      if args.on_release ~= nil or args.on_press ~= nil or args.on_turn_off ~= nil or args.on_turn_on ~= nil then
-        if widget.turned_on then
+      if args.press_effect == true and (args.on_secondary_press ~= nil or args.on_secondary_release ~= nil) then
+        if widget._private.state then
           button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
         else
           button_effect(widget, args.on_normal_bg, args.on_normal_border_color, args.on_normal_border_width)
@@ -529,8 +506,12 @@ function basic.state(args)
         args.child:on_release(self, lx, ly, button, mods, results)
       end
     elseif button == 3 then
-      if type(args.on_secondary_release) == "function" or type(args.on_secondary_press) == "function" then
-        button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
+      if args.press_effect == true and (args.on_secondary_press ~= nil or args.on_secondary_release ~= nil) then
+        if widget._private.state then
+          button_effect(widget, args.normal_bg, args.normal_border_color, args.normal_border_width)
+        else
+          button_effect(widget, args.on_normal_bg, args.on_normal_border_color, args.on_normal_border_width)
+        end
       end
 
       if type(args.on_secondary_release) == "function_secondary" then

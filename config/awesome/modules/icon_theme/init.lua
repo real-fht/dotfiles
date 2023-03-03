@@ -8,11 +8,11 @@
 -- Documentation can be found at the following GTK developer documentation url:
 -- https://docs.gtk.org/gtk3/index.html
 
-local lgi = require("lgi")
+local lgi = require "lgi"
 local Gio = lgi.Gio
 local Gtk3 = lgi.require("Gtk", "3.0")
-local gobject = require("gears.object")
-local gtable = require("gears.table")
+local gobject = require "gears.object"
+local gtable = require "gears.table"
 local ipairs = ipairs
 
 local name_lookup = {
@@ -60,9 +60,9 @@ local function get_icon_by_class(self, c, apps)
     local class_2 = class:gsub("[%-]", ".")
 
     -- Try to match only the first word
-    local class_3 = class:match("(.-)-") or class
-    class_3 = class_3:match("(.-)%.") or class_3
-    class_3 = class_3:match("(.-)%s+") or class_3
+    local class_3 = class:match "(.-)-" or class
+    class_3 = class_3:match "(.-)%." or class_3
+    class_3 = class_3:match "(.-)%s+" or class_3
 
     local possible_icon_names = { class, class_3, class_2, class_1 }
     for _, app in ipairs(apps) do
@@ -83,7 +83,7 @@ function icon_theme:get_client_icon_path(c)
     or get_icon_by_icon_name(self, c, apps)
     or get_icon_by_class(self, c, apps)
     or c.icon
-    or self:choose_icon({ "window", "window-manager", "xfwm4-default", "window_list" })
+    or self:choose_icon { "window", "window-manager", "xfwm4-default", "window_list" }
 end
 
 function icon_theme:choose_icon(icons_names)
@@ -129,7 +129,7 @@ function icon_theme:get_icon_path(icon_name)
 end
 
 local function new(theme_name, icon_size)
-  local obj = gobject({})
+  local obj = gobject {}
   gtable.crush(obj, icon_theme, true)
 
   obj.name = theme_name or nil

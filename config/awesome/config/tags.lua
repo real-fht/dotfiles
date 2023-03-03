@@ -5,13 +5,13 @@
 ---Configuration and setting up for AwesomeWM's tags, not workspaces
 ---------------------------------------------------------------------------------
 
-local awful = require("awful")
+local awful = require "awful"
 local Layout = awful.layout.suit
 local capi = { screen = screen, tag = tag } -- luacheck: ignore
 
 capi.tag.connect_signal("request::default_layouts", function()
   -- Initialize tag layouts
-  awful.layout.append_default_layouts({
+  awful.layout.append_default_layouts {
     Layout.tile,
     Layout.floating,
     Layout.tile.left,
@@ -28,7 +28,7 @@ capi.tag.connect_signal("request::default_layouts", function()
     Layout.corner.ne,
     Layout.corner.sw,
     Layout.corner.se,
-  })
+  }
 end)
 
 capi.screen.connect_signal("request::desktop_decoration", function(s)

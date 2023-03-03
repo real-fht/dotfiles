@@ -6,10 +6,10 @@
 ---------------------------------------------------------------------------------
 
 local GLib = require("lgi").GLib
-local gobject = require("gears.object")
-local gtable = require("gears.table")
-local subscribable = require("modules.animation.subscribable")
-local tween = require("modules.animation.tween")
+local gobject = require "gears.object"
+local gtable = require "gears.table"
+local subscribable = require "modules.animation.subscribable"
+local tween = require "modules.animation.tween"
 
 local animation, manager, instance = {}, {}, nil
 manager.easing = tween.easing
@@ -32,13 +32,13 @@ function animation:start(args)
   -- stylua: ignore end
 
   if self.tween == nil or self.reset_on_stop == true then
-    self.tween = tween.new({
+    self.tween = tween.new {
       initial = initial,
       subject = subject,
       target = target,
       duration = duration * 10 ^ 6,
       easing = easing,
-    })
+    }
   end
 
   if self._private.anim_manager._private.animations[self.index] == nil then
@@ -47,22 +47,22 @@ function animation:start(args)
 
   self.state = true
   self.last_elapsed = GLib.get_monotonic_time()
-  self:emit_signal("started")
+  self:emit_signal "started"
 end
 
 function animation:set(args)
   self:start(args)
-  self:emit_signal("set")
+  self:emit_signal "set"
 end
 
 function animation:stop()
   self.state = false
-  self:emit_signal("stopped")
+  self:emit_signal "stopped"
 end
 
 function animation:abort()
   animation:stop()
-  self:emit_signal("aborted")
+  self:emit_signal "aborted"
 end
 
 function animation:initial()
@@ -105,7 +105,7 @@ function manager:new(args)
 end
 
 local function new()
-  local obj = gobject({})
+  local obj = gobject {}
   gtable.crush(obj, manager, true)
   obj._private = { animations = {}, instant = false }
 

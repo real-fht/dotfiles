@@ -5,8 +5,8 @@
 ---Utility functions used throughout the config
 ---------------------------------------------------------------------------------
 
-local awful = require("awful")
-local beautiful = require("beautiful")
+local awful = require "awful"
+local beautiful = require "beautiful"
 
 local M = {}
 

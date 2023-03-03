@@ -20,7 +20,7 @@ local string = string
 local table = table
 local unpack = unpack or table.unpack -- luacheck: globals unpack
 
-local lgi = require("lgi")
+local lgi = require "lgi"
 
 local DBusProxy = lgi.Gio.DBusProxy
 local DBusProxyFlags = lgi.Gio.DBusProxyFlags
@@ -31,7 +31,7 @@ local GVariant = lgi.GLib.Variant
 
 local _DEFAULT_TIMEOUT = -1
 
-local variant = require("modules.dbus_proxy._variant")
+local variant = require "modules.dbus_proxy._variant"
 
 --[[-- A proxy object
 
@@ -294,7 +294,7 @@ local function build_args(method, ...)
 
   assert(#{ ... } == #args, string.format("Expected %d parameters but got %d", #args, #{ ... }))
 
-  for idx, val in ipairs({ ... }) do
+  for idx, val in ipairs { ... } do
     args[idx].value = val
   end
 
@@ -547,7 +547,7 @@ function Proxy:new(opts)
   local proxy, err = DBusProxy.new_sync(
     opts.bus,
     opts.flags or DBusProxyFlags.NONE,
-    DBusInterfaceInfo({ name = opts.interface }),
+    DBusInterfaceInfo { name = opts.interface },
     opts.name,
     opts.path,
     opts.interface

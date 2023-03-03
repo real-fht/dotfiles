@@ -4,10 +4,10 @@
 ---@module 'daemons.hardware.pulseaudio'
 ---------------------------------------------------------------------------------
 
-local awful = require("awful")
-local gobject = require("gears.object")
-local gtable = require("gears.table")
-local gtimer = require("gears.timer")
+local awful = require "awful"
+local gobject = require "gears.object"
+local gtable = require "gears.table"
+local gtimer = require "gears.timer"
 
 local pulseaudio, instance = {}, nil
 
@@ -88,11 +88,11 @@ end
 local function on_default_device_changed(self)
   awful.spawn.easy_async_with_shell([[pactl info | grep "Default Sink:\|Default Source:"]], function(stdout)
     -- Match for each new line
-    for line in stdout:gmatch("[^\r\n]+") do
+    for line in stdout:gmatch "[^\r\n]+" do
       -- Try to get the default device name from stdout
-      local default_device_name = line:match(": (.*)")
+      local default_device_name = line:match ": (.*)"
       -- the default device's type too
-      local default_device_type = line:match("Default Sink") and "sinks" or "sources"
+      local default_device_type = line:match "Default Sink" and "sinks" or "sources"
       for _, device in pairs(self._private[default_device_type]) do
         if device.name == default_device_name then
           if device.default == false then
@@ -119,24 +119,26 @@ local function get_devices(self)
     function(stdout)
       local device = {}
       -- Match for each new line.
-      for line in stdout:gmatch("[^\r\n]+") do
-        if line:match("Sink") or line:match("Source") then
+      for line in stdout:gmatch "[^\r\n]+" do
+        if line:match "Sink" or line:match "Source" then
           device = {
-            id = line:match("#(%d+)"),
-            type = line:match("Sink") and "sinks" or "sources",
+            id = line:match "#(%d+)",
+            type = line:match "Sink" and "sinks" or "sources",
             default = false,
           }
-        elseif line:match("Name") then
-          device.name = line:match(": (.*)")
-        elseif line:match("Description") then
-          device.description = line:match(": (.*)")
-        elseif line:match("Mute") then
-          device.mute = line:match(": (.*)") == "yes" and true or false
-        elseif line:match("Volume") then
-          device.volume = tonumber(line:match("(%d+)%%"))
+        elseif line:match "Name" then
+          device.name = line:match ": (.*)"
+        elseif line:match "Description" then
+          device.description = line:match ": (.*)"
+        elseif line:match "Mute" then
+          device.mute = line:match ": (.*)" == "yes" and true or false
+        elseif line:match "Volume" then
+          device.volume = tonumber(line:match "(%d+)%%")
 
+          -- If the device wasn't registered yet, do it right now.
           if self._private[device.type][device.id] == nil then
             self:emit_signal(device.type .. "::added", device)
+            self:emit_signal(string.format("%s::%s::updated", device.type, device.id), device)
           end
           self._private[device.type][device.id] = device
         end
@@ -159,23 +161,24 @@ local function get_applications(self)
     ]],
     function(stdout)
       local application = {}
-      for line in stdout:gmatch("[^\r\n]+") do
-        if line:match("Sink Input") or line:match("Source Output") then
+      for line in stdout:gmatch "[^\r\n]+" do
+        if line:match "Sink Input" or line:match "Source Output" then
           application = {
-            id = line:match("#(%d+)"),
-            type = line:match("Sink Input") and "sink_inputs" or "source_outputs",
+            id = line:match "#(%d+)",
+            type = line:match "Sink Input" and "sink_inputs" or "source_outputs",
           }
-        elseif line:match("Mute") then
-          application.mute = line:match(": (.*)") == "yes" and true or false
-        elseif line:match("Volume") then
-          application.volume = tonumber(line:match("(%d+)%%"))
-        elseif line:match("application.name") then
+        elseif line:match "Mute" then
+          application.mute = line:match ": (.*)" == "yes" and true or false
+        elseif line:match "Volume" then
+          application.volume = tonumber(line:match "(%d+)%%")
+        elseif line:match "application.name" then
           application.name = line:match(" = (.*)"):gsub('"', "")
 
           -- Check if the app already existed in the audio apps list, otherwise, add it.
-          local old_application_copy = self._private[application.type][application.id]
+          local old_application_copy = self._private[application.type][application.id] or nil
           if old_application_copy == nil then
             self:emit_signal(application.type .. "::added", application)
+            self:emit_signal(string.format("%s::%s::updated", application.type, application.id), application)
           elseif
             -- Check if volume or mute status changed, to emit update signal
             (application.volume ~= old_application_copy.volume)
@@ -186,7 +189,7 @@ local function get_applications(self)
 
           -- Update the application type
           self._private[application.type][application.id] = application
-        elseif line:match("application.icon_name") then
+        elseif line:match "application.icon_name" then
           application.icon_name = line:match(" = (.*)"):gsub('"', "")
           self:emit_signal(application.type .. "::" .. application.id .. "::icon_name", application.icon_name)
         end
@@ -208,15 +211,15 @@ local function on_device_updated(self, type, id)
     function(stdout)
       local was_there_any_change = false
 
-      for line in stdout:gmatch("[^\r\n]+") do
-        if line:match("Volume") then
-          local volume = tonumber(line:match("(%d+)%%"))
+      for line in stdout:gmatch "[^\r\n]+" do
+        if line:match "Volume" then
+          local volume = tonumber(line:match "(%d+)%%")
           if volume ~= self._private[type][id].volume then
             was_there_any_change = true
           end
           self._private[type][id].volume = volume
-        elseif line:match("Mute") then
-          local mute = line:match(": (.*)") == "yes" and true or false
+        elseif line:match "Mute" then
+          local mute = line:match ": (.*)" == "yes" and true or false
           if mute ~= self._private[type][id].mute then
             was_there_any_change = true
           end
@@ -240,7 +243,7 @@ local function on_object_removed(self, type, id)
 end
 
 local function new()
-  local ret = gobject({})
+  local ret = gobject {}
   gtable.crush(ret, pulseaudio, true)
 
   -- Fields for stored data about audio devices and programs
@@ -252,7 +255,7 @@ local function new()
 
   -- Initiate pulseaudio event subscribing 5 seconds after awesomewm starts
   -- to wait for pulseaudio (managed by pipewire) initiate
-  gtimer({
+  gtimer {
     timeout = 5,
     autostart = true,
     call_now = false,
@@ -268,43 +271,43 @@ local function new()
             ---------------------------------------------------------------------------------------------------------
             -- Devices
             ---------------------------------------------------------------------------------------------------------
-            if line:match("Event 'new' on sink #") or line:match("Event 'new' on source #") then
+            if line:match "Event 'new' on sink #" or line:match "Event 'new' on source #" then
               get_devices(ret)
-            elseif line:match("Event 'change' on server") then
+            elseif line:match "Event 'change' on server" then
               on_default_device_changed(ret)
-            elseif line:match("Event 'change' on sink #") then
-              local id = line:match("Event 'change' on sink #(.*)")
+            elseif line:match "Event 'change' on sink #" then
+              local id = line:match "Event 'change' on sink #(.*)"
               on_device_updated(ret, "sinks", id)
-            elseif line:match("Event 'change' on source #") then
-              local id = line:match("Event 'change' on source #(.*)")
+            elseif line:match "Event 'change' on source #" then
+              local id = line:match "Event 'change' on source #(.*)"
               on_device_updated(ret, "sources", id)
-            elseif line:match("Event 'remove' on sink #") then
-              local id = line:match("Event 'remove' on sink #(.*)")
+            elseif line:match "Event 'remove' on sink #" then
+              local id = line:match "Event 'remove' on sink #(.*)"
               on_object_removed(ret, "sinks", id)
-            elseif line:match("Event 'remove' on source #") then
-              local id = line:match("Event 'remove' on source #(.*)")
+            elseif line:match "Event 'remove' on source #" then
+              local id = line:match "Event 'remove' on source #(.*)"
               on_object_removed(ret, "sources", id)
               ---------------------------------------------------------------------------------------------------------
               -- Applications
               ---------------------------------------------------------------------------------------------------------
-            elseif line:match("Event 'new' on sink%-input #") or line:match("Event 'new' on source%-input #") then
+            elseif line:match "Event 'new' on sink%-input #" or line:match "Event 'new' on source%-input #" then
               get_applications(ret)
-            elseif line:match("Event 'change' on sink%-input #") then
+            elseif line:match "Event 'change' on sink%-input #" then
               get_applications(ret)
-            elseif line:match("Event 'change' on source%-output #") then
+            elseif line:match "Event 'change' on source%-output #" then
               get_applications(ret)
-            elseif line:match("Event 'remove' on sink%-input #") then
-              local id = line:match("Event 'remove' on sink%-input #(.*)")
+            elseif line:match "Event 'remove' on sink%-input #" then
+              local id = line:match "Event 'remove' on sink%-input #(.*)"
               on_object_removed(ret, "sink_inputs", id)
-            elseif line:match("Event 'remove' on source%-output #") then
-              local id = line:match("Event 'remove' on source%-output #(.*)")
+            elseif line:match "Event 'remove' on source%-output #" then
+              local id = line:match "Event 'remove' on source%-output #(.*)"
               on_object_removed(ret, "source_outputs", id)
             end
           end,
         })
       end)
     end,
-  })
+  }
 
   return ret
 end

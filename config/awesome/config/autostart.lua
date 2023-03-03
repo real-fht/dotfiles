@@ -5,14 +5,13 @@
 ---Autostarting daemons, services, and other miscellaneous stuff
 ---------------------------------------------------------------------------------
 
-local awful = require("awful")
-local helpers = require("helpers")
+-- local awful = require("awful")
 
 -- Compositing (window effects, shadows, etc)
 -- Preferrably use dsccillag's or pijulius' picom forks.
-awful.spawn.once("picom")
+-- awful.spawn.once("picom")
 
 -- Sound server, make sure to emerge media-video/pipewire with sound-server flag.
 -- Also launching it here since DBUS_SESSION_BUS_ADDRESS *has* to be set for pw to
 -- worrk.
-awful.spawn.once("gentoo-pipewire-launcher")
+-- awful.spawn.once("gentoo-pipewire-launcher")

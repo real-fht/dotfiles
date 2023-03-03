@@ -28,11 +28,11 @@
 
 local setmetatable = setmetatable
 local type = type
-local color = require("gears.color")
-local gtable = require("gears.table")
-local beautiful = require("beautiful")
-local base = require("wibox.widget.base")
-local shape = require("gears.shape")
+local color = require "gears.color"
+local gtable = require "gears.table"
+local beautiful = require "beautiful"
+local base = require "wibox.widget.base"
+local shape = require "gears.shape"
 local capi = {
   mouse = mouse,
   mousegrabber = mousegrabber,
@@ -326,7 +326,7 @@ for prop in pairs(properties) do
 
     if changed then
       self:emit_signal("property::" .. prop, value)
-      self:emit_signal("widget::redraw_needed")
+      self:emit_signal "widget::redraw_needed"
     end
   end
 
@@ -346,7 +346,7 @@ function slider:set_value(value)
 
   if changed then
     self:emit_signal("property::value", value, false)
-    self:emit_signal("widget::redraw_needed")
+    self:emit_signal "widget::redraw_needed"
   end
 end
 
@@ -360,7 +360,7 @@ function slider:set_value_instant(value)
 
     if changed then
       self:emit_signal("property::value", value, true)
-      self:emit_signal("widget::redraw_needed")
+      self:emit_signal "widget::redraw_needed"
     end
   end
 end
@@ -435,12 +435,12 @@ function slider:draw(_, cr, width, height)
     local bar_active_width = math.floor(
       active_rate * (width - x_offset - right_margin) - (handle_width - handle_border_width / 2) * (active_rate - 0.5)
     )
-    cr:set_source(color.create_pattern({
+    cr:set_source(color.create_pattern {
       type = "linear",
       from = { 0, 0 },
       to = { bar_active_width, 0 },
       stops = { { 0.99, bar_active_color }, { 0.99, bar_color } },
-    }))
+    })
   end
 
   if bar_color then

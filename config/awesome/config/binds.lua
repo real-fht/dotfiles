@@ -5,13 +5,13 @@
 ---Global keybinds that will apply anywhere, at anytime
 ---------------------------------------------------------------------------------
 
-local apps = require("config.apps")
-local awful = require("awful")
-local hotkeys_popup = require("awful.hotkeys_popup")
-local helpers = require("helpers")
-local menubar = require("menubar")
-local main_menu = require("ui.popups.main-menu")
-local pulseaudio_daemon = require("daemons.hardware.pulseaudio")
+local apps = require "config.apps"
+local awful = require "awful"
+local hotkeys_popup = require "awful.hotkeys_popup"
+local helpers = require "helpers"
+local menubar = require "menubar"
+local main_menu = require "ui.popups.main-menu"
+local pulseaudio_daemon = require "daemons.hardware.pulseaudio"
 local capi = { awesome = awesome, client = client } -- luacheck: ignore
 -- -*-
 local button, key = awful.button, awful.key
@@ -19,16 +19,16 @@ local super, alt, ctrl, shift = "Mod4", "Mod1", "Control", "Shift"
 local lmb, mmb, rmb, scrollup, scrolldown = 1, 2, 3, 4, 5 -- luacheck: ignore
 
 -------------------------------------------------------------------------------
-awful.mouse.append_global_mousebindings({
+awful.mouse.append_global_mousebindings {
   -- Todo the menu a
   button({}, rmb, function()
     main_menu:show()
   end),
   button({}, scrollup, awful.tag.viewprev),
   button({}, scrolldown, awful.tag.viewnext),
-})
+}
 -------------------------------------------------------------------------------
-awful.keyboard.append_global_keybindings({
+awful.keyboard.append_global_keybindings {
   -- General awesomewm keys
   key({ super }, "F1", hotkeys_popup.show_help, { group = "Awesome", description = "Show Help" }),
   key({ super }, "w", function()
@@ -38,9 +38,9 @@ awful.keyboard.append_global_keybindings({
   key({ super, shift }, "q", function()
     require("ui.screens.power"):toggle()
   end, { group = "Awesome", description = "Exit screen " }),
-})
+}
 -------------------------------------------------------------------------------
-awful.keyboard.append_global_keybindings({
+awful.keyboard.append_global_keybindings {
   -- Launcher keys (or lauching programs keys)
   key({ super }, "p", function()
     menubar.show(awful.screen.focused())
@@ -51,7 +51,7 @@ awful.keyboard.append_global_keybindings({
   end, { group = "Launcher", description = string.format("Terminal (%s)", apps.terminal) }),
   -- -*-
   key({ super, alt }, "c", function()
-    awful.spawn(os.getenv("HOME") .. "/.local/bin/farge")
+    awful.spawn(os.getenv "HOME" .. "/.local/bin/farge")
   end, { group = "Launcher", description = "Color Picker (farge)" }),
   -- -*-
   key({ super, shift }, "s", function()
@@ -59,23 +59,23 @@ awful.keyboard.append_global_keybindings({
   end, { group = "Launcher", description = "Screenshot Tool" }),
   -- -*-
   key({ super, shift }, "e", function()
-    helpers.spawn.in_terminal("nvim")
+    helpers.spawn.in_terminal "nvim"
   end, { group = "Launcher", description = "Editor (Neovim)" }),
   -- -*-
   key({ super, shift }, "a", function()
-    helpers.spawn.in_terminal("mutt")
+    helpers.spawn.in_terminal "mutt"
   end, { group = "Launcher", description = "Email Client (Neomutt)" }),
   -- -*-
   key({ super, alt }, "m", function()
-    helpers.spawn.in_terminal("ncmpcpp")
+    helpers.spawn.in_terminal "ncmpcpp"
   end, { group = "Launcher", description = "Music Player (ncmpcpp)" }),
   -- -*-
   key({ super, shift }, "b", function()
     awful.spawn(apps.web_browser)
   end, { group = "Launcher", description = "Music Player (ncmpcpp)" }),
-})
+}
 -------------------------------------------------------------------------------
-awful.keyboard.append_global_keybindings({
+awful.keyboard.append_global_keybindings {
   key({}, "XF86AudioRaiseVolume", function()
     pulseaudio_daemon:sink_volume_up(nil, 5)
   end, { group = "Media", description = "Raise Volume" }),
@@ -85,9 +85,9 @@ awful.keyboard.append_global_keybindings({
   key({}, "XF86AudioMute", function()
     pulseaudio_daemon:sink_toggle_mute()
   end, { group = "Media", description = "Toggle Mute" }),
-})
+}
 -------------------------------------------------------------------------------
-awful.keyboard.append_global_keybindings({
+awful.keyboard.append_global_keybindings {
   key({ super }, "j", function()
     awful.client.focus.byidx(1)
   end, { group = "Client", description = "Focus Next (by index)" }),
@@ -105,12 +105,12 @@ awful.keyboard.append_global_keybindings({
   key({ super, ctrl }, "n", function()
     local last_minimized_client = awful.client.restore()
     if last_minimized_client then
-      last_minimized_client:activate({ raise = true, context = "key.unminimize" })
+      last_minimized_client:activate { raise = true, context = "key.unminimize" }
     end
   end, { group = "Client", description = "Restore Last Minimized" }),
-})
+}
 -------------------------------------------------------------------------------
-awful.keyboard.append_global_keybindings({
+awful.keyboard.append_global_keybindings {
   key({ super, shift }, "j", function()
     awful.client.swap.byidx(1)
   end, { group = "Client", description = "Swap with Next (by index)" }),
@@ -155,12 +155,12 @@ awful.keyboard.append_global_keybindings({
   end, { group = "Layout", description = "Toggle Wibar (for focused screen) " }),
   -- -*-
   key({ super }, "Escape", function()
-    require("naughty").destroy_all_notifications({ awful.screen.focused() })
+    require("naughty").destroy_all_notifications { awful.screen.focused() }
   end, { group = "Tag", description = "Go Back" }),
-})
+}
 -------------------------------------------------------------------------------
-awful.keyboard.append_global_keybindings({
-  awful.key({
+awful.keyboard.append_global_keybindings {
+  awful.key {
     modifiers = { super },
     keygroup = "numrow",
     description = "View Tag",
@@ -172,8 +172,8 @@ awful.keyboard.append_global_keybindings({
         tag:view_only()
       end
     end,
-  }),
-  awful.key({
+  },
+  awful.key {
     modifiers = { super, ctrl },
     keygroup = "numrow",
     description = "Toggle Tag",
@@ -185,8 +185,8 @@ awful.keyboard.append_global_keybindings({
         awful.tag.viewtoggle(tag)
       end
     end,
-  }),
-  awful.key({
+  },
+  awful.key {
     modifiers = { super, shift },
     keygroup = "numrow",
     description = "Move focused Client to Tag",
@@ -199,8 +199,8 @@ awful.keyboard.append_global_keybindings({
         end
       end
     end,
-  }),
-  awful.key({
+  },
+  awful.key {
     modifiers = { super, shift, ctrl },
     keygroup = "numrow",
     description = "Toggle focused Client on Tag",
@@ -213,5 +213,5 @@ awful.keyboard.append_global_keybindings({
         end
       end
     end,
-  }),
-})
+  },
+}

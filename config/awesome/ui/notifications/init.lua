@@ -4,5 +4,5 @@
 ---@module 'ui.notifications'
 ---------------------------------------------------------------------------------
 
-require("ui.notifications.box")
-require("ui.notifications.upower")
+require "ui.notifications.box"
+require "ui.notifications.upower"

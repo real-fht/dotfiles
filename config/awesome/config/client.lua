@@ -5,9 +5,9 @@
 ---Configuration for how AwesomeWM should manage and work with clients
 ---------------------------------------------------------------------------------
 
-local awful = require("awful")
-local rclient = require("ruled.client")
-local icon_theme = require("modules.icon_theme")
+local awful = require "awful"
+local rclient = require "ruled.client"
+local icon_theme = require "modules.icon_theme"
 local capi = { awesome = awesome, client = client } -- luacheck: ignore
 -- -*-
 local button, key = awful.button, awful.key
@@ -16,21 +16,21 @@ local lmb, mmb, rmb, scrollup, scrolldown = 1, 2, 3, 4, 5 -- luacheck: ignore
 
 -------------------------------------------------------------------------------
 capi.client.connect_signal("request::default_mousebindings", function()
-  awful.mouse.append_client_mousebindings({
+  awful.mouse.append_client_mousebindings {
     button({}, 1, function(c)
-      c:activate({ context = "mouse_click" })
+      c:activate { context = "mouse_click" }
     end),
     button({ super }, 1, function(c)
-      c:activate({ context = "mouse_click", action = "mouse_move" })
+      c:activate { context = "mouse_click", action = "mouse_move" }
     end),
     button({ super }, 3, function(c)
-      c:activate({ context = "mouse_click", action = "mouse_resize" })
+      c:activate { context = "mouse_click", action = "mouse_resize" }
     end),
-  })
+  }
 end)
 -------------------------------------------------------------------------------
 capi.client.connect_signal("request::default_keybindings", function()
-  awful.keyboard.append_client_keybindings({
+  awful.keyboard.append_client_keybindings {
     key({ super }, "f", function(c)
       c.fullscreen = not c.fullscreen
       c:raise()
@@ -68,13 +68,13 @@ capi.client.connect_signal("request::default_keybindings", function()
     awful.key({ super, alt }, "t", function(c)
       c.titlebar:toggle()
     end, { group = "Client", description = "Toggle Titlebar" }),
-  })
+  }
 end)
 -------------------------------------------------------------------------------
 rclient.connect_signal("request::rules", function()
   -- By default, all the new clients should spawn on the selected screen, while
   -- also trying their best to not overlap over other ones.
-  rclient.append_rule({
+  rclient.append_rule {
     id = "global",
     rule = {},
     properties = {
@@ -83,27 +83,27 @@ rclient.connect_signal("request::rules", function()
       screen = awful.screen.preferred,
       placement = awful.placement.no_overlap + awful.placement.no_offscreen,
     },
-  })
+  }
 
   -- Add titlebars for normal windows and dialogs
-  rclient.append_rule({
+  rclient.append_rule {
     id = "titlebars",
     rule_any = { type = { "normal", "dialog" } },
     properties = { titlebars_enabled = true },
-  })
+  }
 
   -- Chatting apps should be on the 3rd workspace.
-  rclient.append_rule({
+  rclient.append_rule {
     id = "chatting_apps",
     rule_any = { class = { "discord", "WebCord", "TelegramDesktop" } },
     properties = {
       screen = awful.screen.focused(),
       tag = awful.screen.focused().tags[3],
     },
-  })
+  }
 
   -- Office and other stuff.
-  rclient.append_rule({
+  rclient.append_rule {
     id = "office_apps",
     rule_any = { class = { "libreoffice-startcenter" } },
     properties = {
@@ -117,11 +117,11 @@ rclient.connect_signal("request::rules", function()
         return awful.screen.focused().geometry.height / 2
       end,
     },
-  })
+  }
 
   -- Games, they should be floating by default (since most of them run through
   -- wine in a smaller resolution than the screen)
-  rclient.append_rule({
+  rclient.append_rule {
     id = "games",
     rule_any = {
       class = {
@@ -143,10 +143,10 @@ rclient.connect_signal("request::rules", function()
       placement = awful.placement.centered,
       tag = awful.screen.focused().tags[6],
     },
-  })
+  }
 
   -- Just floating stuff.
-  rclient.append_rule({
+  rclient.append_rule {
     id = "floating",
     rule_any = {
       instance = { "copyq", "pinentry" },
@@ -154,10 +154,10 @@ rclient.connect_signal("request::rules", function()
       name = { "Event Tester" }, -- xev.
     },
     properties = { floating = true },
-  })
+  }
 
   -- Floating centered stuff.
-  rclient.append_rule({
+  rclient.append_rule {
     id = "floating_center",
     rule_any = {
       class = {
@@ -172,7 +172,7 @@ rclient.connect_signal("request::rules", function()
       name = { "Olympus" },
     },
     properties = { floating = true, placement = awful.placement.centered },
-  })
+  }
 
   -- I like the clean effect of having my editor entered.
   -- rclient.append_rule {
@@ -187,7 +187,7 @@ rclient.connect_signal("request::rules", function()
   -- }
 
   -- I always want my browsers to be on the 2nd workspace.
-  rclient.append_rule({
+  rclient.append_rule {
     id = "web_browsers",
     rule_any = { class = { "qutebrowser", "librewolf" } },
     properties = {
@@ -196,9 +196,9 @@ rclient.connect_signal("request::rules", function()
         return awful.screen.focused().tags[2]
       end,
     },
-  })
+  }
 
-  rclient.append_rule({
+  rclient.append_rule {
     id = "media_tools",
     rule_any = { class = { "Shotcut" } },
     properties = {
@@ -206,14 +206,14 @@ rclient.connect_signal("request::rules", function()
         return awful.screen.focused().tags[5]
       end,
     },
-  })
+  }
 
   -- Custom titlebar for music clients
-  rclient.append_rule({
+  rclient.append_rule {
     id = "music_player",
     rule = { class = "music", instance = "music" },
     callback = function(c)
-      require("ui.decorations.ncmpcpp")(c)
+      require "ui.decorations.ncmpcpp"(c)
     end,
     properties = {
       floating = true,
@@ -221,7 +221,7 @@ rclient.connect_signal("request::rules", function()
       height = awful.screen.focused().geometry.height / math.sqrt(2),
       width = awful.screen.focused().geometry.width / math.sqrt(3),
     },
-  })
+  }
 end)
 -------------------------------------------------------------------------------
 -- Enable window swallowing, helps with child clients opened from a terminal
@@ -229,5 +229,5 @@ require("modules.bling").module.window_swallowing.start()
 -------------------------------------------------------------------------------
 -- Enable sloppy focus, so that focus follows mouse.
 capi.client.connect_signal("mouse::enter", function(c)
-  c:activate({ context = "mouse_enter", raise = false })
+  c:activate { context = "mouse_enter", raise = false }
 end)

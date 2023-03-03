@@ -4,14 +4,15 @@
 ---@module 'ui.popups.systray'
 ---------------------------------------------------------------------------------
 
-local awful = require("awful")
-local beautiful = require("beautiful")
+local awful = require "awful"
+local beautiful = require "beautiful"
 local dpi = beautiful.xresources.apply_dpi
-local helpers = require("helpers")
-local gobject = require("gears.object")
-local gtable = require("gears.table")
-local wibox = require("wibox")
-local widgets = require("ui.widgets")
+local helpers = require "helpers"
+local gobject = require "gears.object"
+local gtable = require "gears.table"
+local wibox = require "wibox"
+local widgets = require "ui.widgets"
+local theme_vars = beautiful.popups.systray
 
 local systray, instance = {}, nil
 
@@ -35,73 +36,45 @@ function systray:toggle()
 end
 
 local function new()
-  local ret = gobject({})
+  local ret = gobject {}
   gtable.crush(ret, systray, true)
 
-  local systray_widget = wibox.widget({
+  local systray_widget = wibox.widget {
     widget = wibox.widget.systray,
-    base_size = beautiful.systray_icon_size,
+    base_size = theme_vars.icon_size,
     horizontal = true,
-  })
+  }
 
-  ret.popup = awful.popup({
+  ret.popup = awful.popup {
     screen = awful.screen.focused(),
     ontop = true,
     visible = false,
     shape = helpers.ui.rounded_rect(),
     bg = beautiful.colors.transparent,
     placement = function(c)
-      return awful.placement.bottom_right(c, {
+      local placement_fn_name = beautiful.wibar.position .. "_right"
+      return awful.placement[placement_fn_name](c, {
         honor_workarea = true,
-        margins = { right = beautiful.useless_gap + dpi(27), bottom = beautiful.useless_gap },
+        margins = {
+          right = beautiful.useless_gap + dpi(27),
+          [beautiful.wibar.position] = beautiful.useless_gap,
+        },
       })
     end,
-    widget = wibox.widget({
-      layout = wibox.layout.fixed.vertical,
+    widget = wibox.widget {
+      widget = wibox.container.background,
+      bg = theme_vars.bg,
       {
-        widget = wibox.container.background,
-        bg = beautiful.systray_alt_bg,
-        {
-          widget = wibox.container.margin,
-          margins = beautiful.systray_paddings,
-          {
-            layout = wibox.layout.align.horizontal,
-            widgets.text({ text = "Systray" }),
-            nil,
-            widgets.button.text.normal({
-              font = beautiful.icons.xmark.font,
-              text = beautiful.icons.xmark.icon,
-              normal_bg = beautiful.colors.transparent,
-              normal_fg = beautiful.colors.grey_fg,
-              halign = "center",
-              valign = "center",
-              forced_height = dpi(24),
-              forced_width = dpi(24),
-              size = 12,
-              on_release = function()
-                ret:hide()
-              end,
-            }),
-          },
-        },
+        widget = wibox.container.margin,
+        margins = theme_vars.paddings,
+        systray_widget,
       },
-      {
-        widget = wibox.container.background,
-        bg = beautiful.systray_bg,
-        {
-          widget = wibox.container.margin,
-          margins = beautiful.systray_paddings,
-          systray_widget,
-        },
-      },
-    }),
-    -- placement = function(c)
-    --     return awful.placement.top_left(c, {
-    --         honor_workarea = true,
-    --         margins = { left = beautiful.useless_gap, top = beautiful.useless_gap },
-    --     })
-    -- end,
-  })
+    },
+  }
+
+  helpers.ui.hide_on_outside_click(ret)
+  helpers.ui.hide_on_tag_change(ret)
+
   return ret
 end
 
