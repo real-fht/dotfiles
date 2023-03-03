@@ -25,7 +25,7 @@ with lib; {
           cursor_shape = "beam";
           cursor_beam_thickness = "1.5";
           window_padding_width = 10;
-          background_opacity = "0.93";
+          background_opacity = "0.95";
         };
 
         # Better underline.

@@ -24,7 +24,7 @@ with lib; {
         package = pkgs.picom-next;
 
         # General performance tuning.
-        backend = "egl"; # better on intel igpus
+        backend = "glx"; # better on intel igpus
         vSync = true;
 
         # Shadow settings.
