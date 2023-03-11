@@ -18,6 +18,9 @@ with lib; {
       # I ain't waiting 1m30s for networkmanager to setup my cards
       systemd.services.NetworkManager-wait-online.enable = false;
 
+      # Disable wpa supplicant networking then.
+      networking.wireless.enable = false;
+
       # So my user can edit groups and stuff
       user.extraGroups = ["networkmanager"];
     };
