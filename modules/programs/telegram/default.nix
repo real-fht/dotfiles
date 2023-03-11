@@ -13,8 +13,7 @@ with lib; {
     cfg = config.fht.programs.telegram;
   in
     mkIf cfg.enable {
-      # Install the desktop and cli version of telegram, useful for example when I'm
-      # inside a tty/terminal only environment.
-      user.packages = with pkgs; [tdesktop telegram-cli];
+      # Use kotatogram, it's way better than the official client.
+      user.packages = with pkgs; [kotatogram-desktop];
     };
 }
