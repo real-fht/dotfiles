@@ -31,11 +31,12 @@
     };
 
     # Theming, everything is handled by NixOS!
-    theme.name = "decay-dark";
+    theme.name = "yoru";
 
     # Enable/disable programs, aswell as setup my configuration and optionally the
     # current system theme for the enabled program.
     programs = {
+      adb = enable;
       audacity = enable;
       discord = enable;
       # element   = enable;

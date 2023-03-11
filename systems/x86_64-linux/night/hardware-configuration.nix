@@ -16,24 +16,24 @@
   boot.extraModulePackages = [];
   boot.supportedFilesystems = ["ntfs"];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/99cb8750-ed06-4eb1-977f-e781134dbdcb";
-      fsType = "btrfs";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/99cb8750-ed06-4eb1-977f-e781134dbdcb";
+    fsType = "btrfs";
+  };
 
-  fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/5baae23b-b903-47b8-aca9-34febc2cba9b";
-      fsType = "btrfs";
-    };
+  fileSystems."/home" = {
+    device = "/dev/disk/by-uuid/5baae23b-b903-47b8-aca9-34febc2cba9b";
+    fsType = "btrfs";
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/596A-593F";
-      fsType = "vfat";
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/596A-593F";
+    fsType = "vfat";
+  };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/78c58dc7-dcda-4a69-af11-dcf20b399ff9"; }
-    ];
+  swapDevices = [
+    {device = "/dev/disk/by-uuid/78c58dc7-dcda-4a69-af11-dcf20b399ff9";}
+  ];
 
   # Windows disk
   # fileSystems."/mnt/win" = {
