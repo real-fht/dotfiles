@@ -1,47 +1,41 @@
 ---------------------------------------------------------------------------------
 ---@author Real Ferhat (@real-fht) <nferhat20@gmail.com>
 ---@copyright 2022-2023 Real Ferhat (@real-fht) <nferhat20@gmail.com>
----@module 'core'
 ---------------------------------------------------------------------------------
 
--- Disables Neovim's builtin plugins (bundled in $VIMRUNTIME)
-do
-  vim.g.loaded_gzip = 1
-  vim.g.loaded_tar = 1
-  vim.g.loaded_tarPlugin = 1
-  vim.g.loaded_zip = 1
-  vim.g.loaded_zipPlugin = 1
-  vim.g.loaded_getscript = 1
-  vim.g.loaded_getscriptPlugin = 1
-  vim.g.loaded_vimball = 1
-  vim.g.loaded_vimballPlugin = 1
-  -- vim.g.loaded_matchit = 1
-  -- vim.g.loaded_matchparen = 1
-  vim.g.loaded_2html_plugin = 1
-  vim.g.loaded_logiPat = 1
-  vim.g.loaded_rrhelper = 1
-  -- vim.g.loaded_netrw = 1
-  -- vim.g.loaded_netrwPlugin = 1
-  -- vim.g.loaded_netrwSettings = 1
-  -- vim.g.loaded_netrwFileHandlers = 1
+---Disables Neovim's builtin plugins (bundled in $VIMRUNTIME)
+local function disable_builtin_plugins()
+    local builtin_plugins = { "gzip", "tar", "tar", "zip", "zip", "netrw", "2html", "logiPat", "rrhelper" }
+    for _, builtin_plugin in pairs(builtin_plugins) do
+        vim.g["loaded_" .. builtin_plugin] = 1
+        vim.g["loaded_" .. builtin_plugin .. "Plugin"] = 1
+    end
 end
 
--- Disable checking for providers.
-do
-  vim.g.loaded_python_provider = 0
-  vim.g.loaded_node_provider = 0
-  vim.g.loaded_ruby_provider = 0
-  vim.g.loaded_perl_provider = 0
+---Disable checking for language providers.
+local function disable_checking_providers()
+    local providers = { "python", "node", "ruby", "perl" }
+    for _, provider in pairs(providers) do
+        vim.g["loaded_" .. provider .. "_provider"] = 0
+    end
 end
 
--- Map leader key to space.
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+local function mapleader(leader_key)
+    vim.g.mapleader = leader_key
+    vim.g.maplocalleader = leader_key
+end
 
+-- Generalities that are just common everywhere.
+disable_builtin_plugins()
+disable_checking_providers()
+mapleader(" ")
+
+-- Personal configuration initialization.
 require("core.options")
 require("core.keymaps")
 require("core.autocmd")
 require("core.plugins")
 
--- Colorscheme
-vim.cmd.colorscheme("themer")
+-- NOTE: You have to set the theme after setting options since tgc hasn't been
+-- set yet, making the theme break.
+require("theme").apply()

@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------------
 ---@author Real Ferhat (@real-fht) <nferhat20@gmail.com>
 ---@copyright 2022-2023 Real Ferhat (@real-fht) <nferhat20@gmail.com>
----@module 'core.options'
+
 ---------------------------------------------------------------------------------
 
 ---@diagnostic disable
@@ -10,13 +10,15 @@
 -- is set in this file.
 local O = vim.opt
 
--- Seriously, we **dont** need this
+-- Disable Vi-Like compatibility. Who needs this???
+-- Also this breaks basically every plugin that's used here.
 O.cp, O.cpo = false, ""
 
--- Changes for better path searching and dir navigation
-O.cdhome = true
-O.path:append("**")
-O.cdpath:append("**")
+-- Better path, directory and file searching
+-- Also better behaviour changing for directories.
+O.cdhome = true -- `:cd` alone takes you to ~ or $HOME
+O.path:append("**") -- search recursively in the current working directory
+O.cdpath:append("**") -- cd recursively in the current working directory
 O.autochdir = false -- Don't follow the buffer directory
 
 -- Better search behaviour defaults.
@@ -30,7 +32,7 @@ O.background = "dark" -- join the dark side..
 O.wrap = false -- I hate line wrapping.
 O.scrolloff = 8 -- Always keep atleast 8 lines up and down the cursor
 O.sidescrolloff = 12 -- Same as ^ but horizontally
-O.fillchars = { eob = " ", fold = " ", foldopen = "", foldsep = " ", foldclose = "" }
+O.fillchars = { eob = " ", fold = " ", foldopen = "", foldsep = " ", foldclose = "", stl = " ", stlnc = "_" }
 O.nu, O.rnu, O.nuw = false, false, 4 -- Enable the numberline
 O.cursorline = true -- Pretty useful
 O.scl, O.stal = "yes:1", 1 -- Always show the signcolumn and never show the  tabline
@@ -48,13 +50,14 @@ O.mouse = "a" -- Enable mouse support
 O.scroll = 12 -- Scroll 12 lines using <C-d> and <C-u>
 O.undofile = true -- Enable persistent undo
 O.errorbells = false -- ANNOYING
-local tab_size = 2
+local tab_size = 4
 O.ts, O.sts, O.sw = tab_size, tab_size, tab_size
 O.expandtab = true -- Use soft tabs (not literal \t)
 O.ai, O.si = true, true -- auto and smart indenting
 O.exrc = true -- Load a .vimrc/.exrc from cwd if it exists
 O.hidden = true -- Don't unload buffers that aren't displayed
 O.fdls = 9999 -- don't fold anything automatically
+O.splitright, O.splitbelow = true, true
 
 -- Shell setup.
 -- Based on fish-shell/fish-shell#7004, using fish in Neovim causes horrible
@@ -68,17 +71,18 @@ end)()
 -- Clipboard setup.
 if vim.fn.has("clipboard") > 0 then
     -- Use system clipboard is provider is available
+    -- Also use :checkhealth to check if a clipboard provider is available
     O.clipboard:append({ "unnamed", "unnamedplus" })
 end
 
 -- Runtimepath setup.
 -- I do this only for 'app-vim/gentoo-syntax', for ebuild editing, make.conf
 -- and other gentoo-specific configuration.
-O.runtimepath:append("/usr/share/vim/vimfiles")
+-- O.runtimepath:append("/usr/share/vim/vimfiles")
 
 -- Go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
-O.whichwrap:append("<>[]hl")
+O.whichwrap:append([[<>[]hl]])
 
 -- Disable nvim intro, aswell as completion messages
 O.shortmess:append("sIc")

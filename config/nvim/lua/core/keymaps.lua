@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------------
 ---@author Real Ferhat (@real-fht) <nferhat20@gmail.com>
 ---@copyright 2022-2023 Real Ferhat (@real-fht) <nferhat20@gmail.com>
----@module 'core.keymaps'
+
 ---------------------------------------------------------------------------------
 
 -- Overriding the vim.keymap.set function to enforce default settings.
@@ -13,9 +13,9 @@ vim.keymap.set_backup = vim.keymap.set
 ---@param rhs string|function
 ---@param opts table|nil
 function vim.keymap.set(mode, lhs, rhs, opts) ---@diagnostic disable-line
-  opts = opts or {}
-  opts.silent = opts.silent ~= nil and opts.silent or true -- Why isn't this a default?
-  vim.keymap.set_backup(mode, lhs, rhs, opts)
+    opts = opts or {}
+    opts.silent = opts.silent ~= nil and opts.silent or true -- Why isn't this a default?
+    vim.keymap.set_backup(mode, lhs, rhs, opts)
 end
 
 local set_keymap = vim.keymap.set
@@ -44,21 +44,21 @@ set_keymap("n", "<leader>n", ":enew<CR>", { desc = "New Buffer" })
 set_keymap("i", "<C-t>", "<cmd>enew<BAR>startinsert<CR>", { desc = "New Buffer" })
 
 local function close()
-  -- Returns `true` if there's only one buffer left.
-  local is_last_buffer = function()
-    return #vim.fn.getbufinfo({ buflisted = 1 }) == 1
-  end
+    -- Returns `true` if there's only one buffer left.
+    local is_last_buffer = function()
+        return #vim.fn.getbufinfo({ buflisted = 1 }) == 1
+    end
 
-  -- The current buffer filetype and buffer type.
-  local filetype, buftype = vim.bo.filetype, vim.bo.buftype
+    -- The current buffer filetype and buffer type.
+    local filetype, buftype = vim.bo.filetype, vim.bo.buftype
+    -- Bufdelete command provided by bufdelete.nvim.
+    local bufdelete_cmd = "Bdelete"
 
-  local bufdelete_cmd = "Bdelete"
+    local cmd = ((filetype == "help" or buftype == "nofile" or is_last_buffer()) and "q")
+        or (buftype == "terminal" and bufdelete_cmd .. "!")
+        or bufdelete_cmd
 
-  local cmd = ((filetype == "help" or buftype == "nofile" or is_last_buffer()) and "q")
-    or (buftype == "terminal" and bufdelete_cmd .. "!")
-    or bufdelete_cmd
-
-  vim.cmd(cmd)
+    vim.cmd(cmd)
 end
 
 -- Custom bufdelete function that doesn't mess up window layout.
