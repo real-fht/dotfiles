@@ -25,6 +25,9 @@ with lib; {
 
         # General performance tuning.
         backend = "glx"; # better on intel igpus
+        settings.glx-no-stencil = false;
+        settings.experimental-backends = true;
+        settings.use-damage = true;
         vSync = true;
 
         # Shadow settings.
@@ -56,14 +59,15 @@ with lib; {
         settings.blur-method = "dual_kawase";
         settings.blur-strength = 5;
         settings.blur-background = true;
-        settings.blur-background-fixed = true;
+        settings.blur-background-frame = true;
+        settings.blur-background-fixed = false;
         settings.blur-background-exclude = [];
 
         # Custom fork for better animations.
         # settings.animations = true;
         # settings.animation-force-steps = false;
         # settings.animation-delta = 10;
-        # settings.animation-clamping = false;
+        # settings.animation-clamping = true;
         # settings.animation-stiffness = 200.0;
         # settings.animation-dampening = 25.0;
         # settings.animation-window-mass = 1.0;
