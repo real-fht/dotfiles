@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 with lib; {
@@ -17,11 +18,30 @@ with lib; {
       # as completion, linting, diagnostics, etc...
       # TODO: Maybe create a lang.<name> module?
       user.packages = with pkgs;
-        [neovim xclip ripgrep fd]
-        ++ [sumneko-lua-language-server luajitPackages.luacheck stylua]
-        ++ [nil alejandra]
-        ++ (with nodePackages; [typescript-language-server prettier])
-        ++ [nodePackages.vscode-langservers-extracted];
+        [
+          inputs.neovim-nightly.packages.${pkgs.system}.neovim
+          xclip # Clipboard provider
+          ripgrep # Regex matcher, for telescope and other plugins
+          fd # File finder, for telescope and filetree
+        ]
+        ++ [
+          sumneko-lua-language-server # Lua language features
+          luajitPackages.luacheck # Lua checking and linting
+          stylua # Lua formatting
+        ]
+        ++ [
+          nil # Nix language features (but not completion)
+          alejandra # Nix formatting
+        ]
+        ++ (with nodePackages; [
+          typescript-language-server # Javascript/Typescript language features
+          prettier # JS/TS and other languages formatting
+        ])
+        ++ [
+          # CSS/HTML/JSON(C) language features
+          # Prettier handles formatting
+          nodePackages.vscode-langservers-extracted
+        ];
 
       # Install my configuration
       home.xdg.configFile."nvim".source = lib.files.mkOutOfStoreSymlink "/etc/nixos/config/nvim";
