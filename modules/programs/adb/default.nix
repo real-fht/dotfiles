@@ -15,5 +15,6 @@ with lib; {
     mkIf cfg.enable {
       # Just enable it.
       programs.adb.enable = true;
+      user.extraGroups = ["adbusers"]; # Allow my user.
     };
 }
